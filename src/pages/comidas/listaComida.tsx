@@ -1,6 +1,6 @@
 import Platillo from "../../components/platillo";
 import type { PlatilloPayload } from "../../types/Platillo";
-import { obtenerPlatos,eliminarPlato } from "../../api/platillo.api";
+import { obtenerPlatos,eliminarPlato, actualizarActivo } from "../../api/platillo.api";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
@@ -9,6 +9,7 @@ import { Link } from "react-router-dom";
 export default function ListaComida() {
   const [platillos, setPlatillos] = useState<PlatilloPayload[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadingToggle, setLoadingToggle] = useState<number | null>(null);
 
   useEffect(() => {
     cargarPlatillos();
@@ -24,14 +25,28 @@ export default function ListaComida() {
       setLoading(false);
     }
   };
-  const handleToggleaActivo = (id:number, activo:boolean) => {
+
+  const handleToggleaActivo = async (id:number, activo:boolean) => {
     setPlatillos(prev => 
       prev.map(plato => 
         plato.id === id ? {...plato, activo} : plato
       )
     );
-    //llamar a la api
-    // await actualizarActivo(id, activo)
+
+    setLoadingToggle(id);
+
+    try {
+      await actualizarActivo(id, activo);
+    }catch (error){
+      setPlatillos(prev => 
+        prev.map(p => 
+          p.id === id ? {...p, activo: !activo} : p
+        )
+      );
+      Swal.fire("Error", "No se pudo actualizar", "error");
+    }finally{
+      setLoadingToggle(null)
+    }
   };
 
   const handleDelete = async (id: number) => {
@@ -107,6 +122,7 @@ export default function ListaComida() {
               plato={plato}
               onDelete={handleDelete}
               onToggleActivo={handleToggleaActivo}
+              loading={loadingToggle === plato.id}
             />
           ))}
         </div>

@@ -1,5 +1,6 @@
 import api from "./api";
 import type { ResponsePayload,RegistrarPayload,UpdatePayload, PlatilloPayload } from "../types/Platillo";
+import axios from "axios";
 
 
 export const registrarPlato = async(payload:RegistrarPayload): Promise<ResponsePayload> => {
@@ -24,4 +25,9 @@ export const updatePlato = async(payload:UpdatePayload, id:number):Promise<Respo
 export const eliminarPlato = async(id:number):Promise<ResponsePayload> => {
     const response = await api.delete(`/platos/${id}`)
     return response.data
+}
+
+export const actualizarActivo = async(id:number, activo: boolean) => {
+    const res = await api.patch(`/platos/${id}/activo`, { activo });
+    return res.data
 }
