@@ -10,6 +10,8 @@ export default function DetallesMesa(){
       : estado === "ocupado"
       ? "bg-red-100 text-red-700"
       : "bg-yellow-100 text-yellow-700";
+
+
     return(
         <div className="p-6 space-y-8">
             {/* Título */}
@@ -31,7 +33,8 @@ export default function DetallesMesa(){
                 </button>
             </div>
 
-            {/* Card principal */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                 {/* Card principal */}
             <div className="bg-white p-6 rounded-xl shadow space-y-6 max-w-md">
                 <h2 className="text-2xl font-semibold">
                     Mesa {id}
@@ -68,6 +71,32 @@ export default function DetallesMesa(){
                             <option value="reservado">Reservado</option>
                         </select>
                   </div>
+            </div>
+            {/* Columna derecha (Pedidos) */}
+
+            <div className="bg-white p-6 rounded-xl shadow space-y-4 lg:col-span-2">
+                <h2 className="text-2xl font-semibold border-b pb-2">
+                    Productos pedidos
+                </h2>
+                {/*Lista */}
+                <div className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <span className="font-medium">
+                        2 x Hamburguesa
+                    </span>
+                    <span className="font-semobold text-gray-700">
+                        $240
+                    </span>
+                </div>
+                 {/* Total */}
+                 <div className="flex justify-between items-center pt-4 border-t">
+                    <span className="text-lg font-bold">
+                        Total
+                    </span>
+                    <span className="text-lg font-bold text-green-600"> 
+                        $280
+                    </span>
+                 </div>
+            </div>
             </div>
         </div>
     );
