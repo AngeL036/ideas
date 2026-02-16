@@ -6,7 +6,7 @@ export default function PublicLayout(){
         <div className="flex min-h-screen bg-gray-100">
            {/* <Header />* */}
             <Sidebar />
-            <main className="flex-1 p-6">
+            <main className="ml-64 p-6">
                 <Outlet />
             </main>
         </div>

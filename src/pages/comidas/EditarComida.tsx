@@ -13,7 +13,6 @@ export default function EditarComida(){
             nombre:"chilaquieres",
             precio:99,
             descripcion:"chilaquiles rojos",
-            cantidad: 5
         });
     }, [])
 

@@ -60,9 +60,11 @@ export default function PedidoCard({comida}:Props){
                     ${comida.precio}
                 </span>
 
+                {/**
                 <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
-                    Stok:{comida.cantidad}
+                    Stok:{}
                 </span>
+                 */}
             </div>
 
                                 {/* Contador + Agregar */}

@@ -12,7 +12,7 @@ export default function Sidebar() {
   ];
 
   return (
-    <aside className="h-screen w-64 bg-slate-900 text-white flex flex-col shadow-lg">
+    <aside className="fixed left-0 top-0 h-screen w-64 bg-slate-900 text-white flex flex-col shadow-lg">
       
       {/* Logo */}
       <div className="px-6 py-5 border-b border-slate-800">

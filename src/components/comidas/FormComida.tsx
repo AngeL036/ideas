@@ -104,7 +104,7 @@ export default function FormComida({
         </div>
 
         {/* Cantidad */}
-        <div>
+        {/*<div>
           <label className="block text-sm font-medium text-gray-700">
             Cantidad
           </label>
@@ -124,7 +124,7 @@ export default function FormComida({
               {errors.cantidad.message}
             </span>
           )}
-        </div>
+        </div>*/}
 
         {/* Botón */}
         <button
