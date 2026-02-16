@@ -1,81 +1,53 @@
 import type { PlatilloPayload } from "../types/Platillo";
 import { Link } from "react-router-dom";
-import Switch from "./ui/Switch";
 
 interface Props {
   plato: PlatilloPayload;
   onDelete: (id: number) => void;
-  onToggleActivo: (id:number, activo:boolean) => void;
-  loading:boolean;
+  onToggleActivo: (id: number, activo: boolean) => void;
+  loading: boolean;
 }
 
 export default function Platillo({ plato, onDelete, onToggleActivo, loading }: Props) {
   return (
-    <div
-      className="bg-white rounded-xl shadow p-5
-                 hover:shadow-lg transition
-                 flex flex-col justify-between"
-    >
+    <article className="flex h-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
       <div>
-        <h2 className="text-lg font-semibold text-gray-800">
-          {plato.nombre}
-        </h2>
-
-        <p className="text-sm text-gray-600 mt-1 line-clamp-3">
-          {plato.descripcion}
-        </p>
+        <h2 className="text-lg font-bold text-slate-900">{plato.nombre}</h2>
+        <p className="mt-1 line-clamp-3 text-sm text-slate-600">{plato.descripcion}</p>
       </div>
 
       <div className="mt-4 flex items-center justify-between">
-        <span className="text-xl font-bold text-green-600">
-          ${plato.precio}
-        </span>
-
-        <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
-        {/*   Stock: {plato.cantidad}*/}
-        </span>
+        <span className="text-2xl font-black text-emerald-600">${plato.precio}</span>
       </div>
 
-      {/* BOTONES */}
-      <div className="mt-4 flex gap-2">
+      <div className="mt-4 flex items-center gap-2">
         <Link
           to={`/comida/editar/${plato.id}`}
-          className="flex-1 text-center
-                     bg-blue-600 text-white
-                     py-2 rounded-lg
-                     hover:bg-blue-700 transition"
+          className="flex-1 rounded-xl bg-slate-900 py-2 text-center text-sm font-semibold text-white transition hover:bg-slate-700"
         >
-          ✏️ Editar
+          Editar
         </Link>
-        {/*
+
         <button
           onClick={() => onDelete(plato.id)}
-          className="flex-1
-                     bg-red-600 text-white
-                     py-2 rounded-lg
-                     hover:bg-red-700 transition"
+          className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-100"
         >
-          🗑️ Eliminar
+          Borrar
         </button>
-        * */}
-      <div className="flex items-center gap-2">
-          <span className="text-sm">Activo</span>
-              <button 
-                disabled={loading}
-                onClick={() => onToggleActivo(plato.id, !plato.activo)}
-                className={`w-14 h-7 flex items-center rounded-full p-1 transition-all duration-300
-      ${plato.activo ? "bg-green-500" : "bg-gray-300"}
-      ${loading ? "opacity-50 cursor-not-allowed" : ""}
-    `}
-                >
-                <div 
-                  className={`bg-white w-5 h-5 rounded-full shadow-md transform transition-all duration-300
-                              ${plato.activo ? "translate-x-7" : ""}
-                                `}>
-                </div>
-              </button>    
-       </div>
       </div>
-    </div>
+
+      <div className="mt-4 flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
+        <span className="text-sm font-medium text-slate-600">Activo</span>
+        <button
+          disabled={loading}
+          onClick={() => onToggleActivo(plato.id, !plato.activo)}
+          className={`flex h-7 w-14 items-center rounded-full p-1 transition-all duration-300
+          ${plato.activo ? "bg-emerald-500" : "bg-slate-300"}
+          ${loading ? "cursor-not-allowed opacity-50" : ""}`}
+        >
+          <div className={`h-5 w-5 rounded-full bg-white shadow-md transition-all duration-300 ${plato.activo ? "translate-x-7" : ""}`} />
+        </button>
+      </div>
+    </article>
   );
 }

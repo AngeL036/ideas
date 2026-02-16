@@ -1,40 +1,31 @@
-import { Link } from "react-router-dom"
-import type { PedidoItem } from "../../types/Pedido"
+import { Link } from "react-router-dom";
+import type { PedidoItem } from "../../types/Pedido";
 
 interface Props {
-    pedido:PedidoItem
+  pedido: PedidoItem;
 }
 
-export default function InfoPedido({pedido}:Props){
-    return(
-        <Link to={`/detalle/pedido/${pedido.id}`}>
-       
-            <div className="bg-white rounded-xl shadow p-5 hover:shadow-lg transition flex flex-col justify-between ">
-                <div className="flex justify-between items-center">
-                    <h1 
-                        className="font-semibold text-lg">
-                            {pedido.usuario_id}
-                    </h1>
-                    <span
-                        className="text-sm px-3 py-1 rounded-full bg-blue-100 text-blue-700"
-                        >
-                        {pedido.estado}
-                    </span>
-                </div>
-                <div className="flex flex-col text-sm text-gray-700">
-                    <span className="font-medium">Total: ${pedido.total}</span>
-                    <span className="">{pedido.direccion_envio}</span>
-                </div>
-                <div className="text-xs text-gray-500">
-                    <span>{new Date(pedido.create_at).toLocaleString("es-MX",{
-                        dateStyle: "medium",
-                        timeStyle:"short",
-                    })}</span>
-                    
-                </div> 
-            </div>
-    
-         </Link>
+export default function InfoPedido({ pedido }: Props) {
+  return (
+    <Link to={`/detalle/pedido/${pedido.id}`}>
+      <article className="flex h-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+        <div className="flex items-center justify-between">
+          <h2 className="text-lg font-bold text-slate-900">Pedido #{pedido.id}</h2>
+          <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">{pedido.estado}</span>
+        </div>
 
-    )
+        <div className="mt-4 space-y-1 text-sm text-slate-600">
+          <p className="font-semibold text-emerald-600">Total: ${pedido.total}</p>
+          <p>{pedido.direccion_envio}</p>
+        </div>
+
+        <p className="mt-4 text-xs text-slate-500">
+          {new Date(pedido.create_at).toLocaleString("es-MX", {
+            dateStyle: "medium",
+            timeStyle: "short",
+          })}
+        </p>
+      </article>
+    </Link>
+  );
 }

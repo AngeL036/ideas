@@ -1,16 +1,13 @@
-
-
-interface Props{
-    numero:number;
-    estado:string;
+interface Props {
+  numero: number;
+  estado: string;
 }
 
-export default function ContadorMesas({numero,estado}:Props)
-{
-    return(
-        <div className="flex flex-col bg-white rounded-xl items-center justify-center shadow-xl p-4">
-            <span className="text-xl font-semibold">{numero}</span>
-            <span>{estado}</span>
-        </div>
-    )
+export default function ContadorMesas({ numero, estado }: Props) {
+  return (
+    <article className="rounded-2xl border border-slate-200 bg-white p-4 text-center shadow-sm">
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{estado}</p>
+      <p className="mt-2 text-3xl font-black text-slate-900">{numero}</p>
+    </article>
+  );
 }

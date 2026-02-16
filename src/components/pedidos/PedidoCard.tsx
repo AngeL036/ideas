@@ -4,105 +4,76 @@ import Swal from "sweetalert2";
 
 interface Props {
   comida: PlatilloPayload;
-  
 }
 
-export default function PedidoCard({comida}:Props){
-    const [contador, setContador] = useState(1);
+export default function PedidoCard({ comida }: Props) {
+  const [contador, setContador] = useState(1);
 
-    const AgregarAlCarrito = () =>  {
-        const carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
+  const agregarAlCarrito = () => {
+    const carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
+    const existe = carrito.find((item: any) => item.id === comida.id);
 
-        const existe = carrito.find((item: any) => item.id === comida.id)
-
-        if(existe){
-            existe.cantidad += contador;
-        }else{
-            carrito.push({
-                id:comida.id,
-                nombre: comida.nombre,
-                precio: comida.precio,
-                cantidad: contador,
-            });
-        }
-
-        localStorage.setItem("carrito", JSON.stringify(carrito));
-        Swal.fire({
-            icon:"success",
-            title: "Agregado",
-            text:`${contador} ${comida.nombre}(s) añadidos al pedido`,
-            timer:1500,
-            showConfirmButton:false, 
-        });
-        
-        setContador(1)
-
+    if (existe) {
+      existe.cantidad += contador;
+    } else {
+      carrito.push({
+        id: comida.id,
+        nombre: comida.nombre,
+        precio: comida.precio,
+        cantidad: contador,
+      });
     }
 
-    return(
-        <div className="bg-white rounded-xl shadow p-5
-                        hover:shadow-lg transition
-                        flex flex-col justify-between"
-        >
-                            {/* Info */}
-            <div>
-                <h2 className="text-lg font-semibold text-gray-800">
-                    {comida.nombre}
-                </h2>
-                <p className="text-sm text-gray-600 mt-1 line-clamp-3">
-                    {comida.descripcion}
-                </p>
-            </div>
+    localStorage.setItem("carrito", JSON.stringify(carrito));
+    Swal.fire({
+      icon: "success",
+      title: "Agregado",
+      text: `${contador} ${comida.nombre}(s) anadidos al pedido`,
+      timer: 1500,
+      showConfirmButton: false,
+    });
 
-                                {/* Precio y stock */}
-            <div className="mt-4 flex items-center justify-between">
-                <span className="text-xl font-bold text-green-600">
-                    ${comida.precio}
-                </span>
+    setContador(1);
+  };
 
-                {/**
-                <span className="text-xs bg-gray-100 px-2 py-1 rounded-full">
-                    Stok:{}
-                </span>
-                 */}
-            </div>
+  return (
+    <article className="flex h-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+      <div>
+        <h2 className="text-lg font-bold text-slate-900">{comida.nombre}</h2>
+        <p className="mt-1 line-clamp-3 text-sm text-slate-600">{comida.descripcion}</p>
+      </div>
 
-                                {/* Contador + Agregar */}
-            <div className="mt-5 flex gap-3 items-center">
+      <div className="mt-4 flex items-center justify-between">
+        <span className="text-2xl font-black text-emerald-600">${comida.precio}</span>
+      </div>
 
-                                {/*Contador */}
-                <div className="flex items-center gap-2 border rounded-lg px-3 py-1">
-                    <button 
-                        className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300"
-                        onClick={() => setContador(Math.max(0, contador -1))}
-                        >
-                     -
-                    </button>
+      <div className="mt-5 flex items-center gap-3">
+        <div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-1">
+          <button
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-slate-700 transition hover:bg-slate-300"
+            onClick={() => setContador(Math.max(0, contador - 1))}
+          >
+            -
+          </button>
 
-                    <span className="w-6 text-center font-semibold">
-                        {contador}
-                    </span>
+          <span className="w-6 text-center font-semibold text-slate-800">{contador}</span>
 
-                    <button 
-                        className="w-8 h-8 flex items-center justify-center
-                                    rounded-full bg-gray-200 hover:bg-gray-300"
-                        onClick={() => setContador(contador +1)}
-                        >
-                     +
-                    </button>
-                </div>
-                            {/* Botón Agregar */}
-
-                <button
-                    disabled={contador === 0}
-                    onClick={AgregarAlCarrito}
-                    className="flex-1 bg-green-600 text-white
-                                py-2 rounded-lg hover:bg-green-700 transition
-                                disable:bg-gray-300 disable:cursor-not-allowed">
-                Agregar
-               </button>
-            </div>
+          <button
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-slate-700 transition hover:bg-slate-300"
+            onClick={() => setContador(contador + 1)}
+          >
+            +
+          </button>
         </div>
-    )
+
+        <button
+          disabled={contador === 0}
+          onClick={agregarAlCarrito}
+          className="flex-1 rounded-xl bg-slate-900 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-300"
+        >
+          Agregar
+        </button>
+      </div>
+    </article>
+  );
 }
- 
