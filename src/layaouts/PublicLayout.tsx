@@ -1,11 +1,12 @@
 import { Outlet } from "react-router-dom";
 import Header from "../components/Hader";
-export default function PublicLayaot(){
+import Sidebar from "../components/Sidebar";
+export default function PublicLayout(){
     return(
-        <div className="min-h-screen bg-gray-100">
-            <Header />
-
-            <main className="max-w-7xl mx-auto p-6">
+        <div className="flex min-h-screen bg-gray-100">
+           {/* <Header />* */}
+            <Sidebar />
+            <main className="flex-1 p-6">
                 <Outlet />
             </main>
         </div>

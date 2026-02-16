@@ -6,7 +6,7 @@ function App() {
   
 
   return (
-   <BrowserRouter basename='/sistema'>
+   <BrowserRouter>
       <AppRoutes />
    </BrowserRouter>
   )

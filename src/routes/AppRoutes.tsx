@@ -3,7 +3,7 @@ import Dashboard from '../pages/dashboard'
 import IndexPedidos from '../pages/pedidos/IndexPedidos'
 import AgregarComida from '../pages/comidas/AgregarComida'
 import ListaComida from '../pages/comidas/listaComida'
-import PublicLayaot from '../layaouts/PublicLayout'
+import PublicLayout from '../layaouts/PublicLayout'
 import EditarComida from '../pages/comidas/EditarComida'
 import IndexVenta from '../pages/ventas/IndexVenta'
 import IndexEstadisticas from '../pages/estadisticas/IndexEstadisticas'
@@ -12,12 +12,14 @@ import Carrito from '../pages/carrito/Carrito'
 import Register from '../pages/auth/Register'
 import DetallePedido from '../pages/pedidos/DetallePedido'
 import PerfilIndex from '../pages/perfil/PerfilIndex'
+import IndexMesas from '../pages/mesas/IndexMesas'
+import DetallesMesa from '../pages/mesas/DetallesMesa'
 
 export default function AppRoutes(){
     return(
     <Routes>
         
-        <Route element={<PublicLayaot />}>
+        <Route element={<PublicLayout />}>
             <Route path="/" element={<Dashboard/>}/>
 
                 {/**  <Route path='/comidas' element={<Index />} />*/} 
@@ -38,6 +40,9 @@ export default function AppRoutes(){
                 <Route path='/registro' element={<Register />} />
 
                 <Route path='/perfil' element={<PerfilIndex />} />
+
+                <Route path='/mesas' element={<IndexMesas />}/>
+                <Route path='/mesa/editar/:id' element={<DetallesMesa/>} />
             </Route>
         </Routes>
     
