@@ -1,8 +1,16 @@
-import { Link, useLocation } from "react-router-dom";
-import { FaHome, FaUtensils, FaClipboardList, FaChair } from "react-icons/fa";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { FaHome, FaUtensils, FaClipboardList, FaChair, FaSignOutAlt } from "react-icons/fa";
 
 export default function Sidebar() {
   const location = useLocation();
+  const navigate = useNavigate();
+  let user: { email?: string } = {};
+  try {
+    user = JSON.parse(localStorage.getItem("user") || "{}");
+  } catch {
+    user = {};
+  }
+  const userLabel = user.email || "Usuario";
 
   const menu = [
     { name: "Dashboard", path: "/", icon: <FaHome /> },
@@ -10,6 +18,11 @@ export default function Sidebar() {
     { name: "Ordenes", path: "/pedidos", icon: <FaClipboardList /> },
     { name: "Mesas", path: "/mesas", icon: <FaChair /> },
   ];
+  const cerrarSesion = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    navigate("/login", { replace: true });
+  };
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 border-r border-slate-200/70 bg-white/90 text-slate-900 backdrop-blur">
@@ -43,7 +56,14 @@ export default function Sidebar() {
 
         <div className="m-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
           <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Usuario</p>
-          <p className="mt-1 text-sm font-semibold text-slate-800">Angel</p>
+          <p className="mt-1 truncate text-sm font-semibold text-slate-800">{userLabel}</p>
+          <button
+            onClick={cerrarSesion}
+            className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 hover:text-rose-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-300"
+          >
+            <FaSignOutAlt className="text-sm" />
+            <span>Cerrar sesion</span>
+          </button>
         </div>
       </div>
     </aside>

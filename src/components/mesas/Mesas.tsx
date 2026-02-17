@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import type {MesasPayload} from "../../types/Mesa"
+import type {MesasPayload,Mesa} from "../../types/Mesa"
 
 
 interface Props{
-    mesa: MesasPayload;
+    mesa: Mesa;
 }
 
 
@@ -11,7 +11,7 @@ export default function Mesas({mesa}:Props){
     const isOcupada = mesa.estado === "ocupada";
     
     return(
-        <Link to={`/mesa/editar/${mesa.id}`}>
+        <Link to={`/mesa/editar/${mesa.numero}`}>
             <article
                 className={`rounded-2xl border p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md
                 ${isOcupada
@@ -22,7 +22,7 @@ export default function Mesas({mesa}:Props){
                 <div className="mb-4 flex items-start justify-between">
                     <div>
                         <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Mesa</p>
-                        <h3 className="text-2xl font-bold text-gray-800">#{mesa.id}</h3>
+                        <h3 className="text-2xl font-bold text-gray-800">#{mesa.numero}</h3>
                     </div>
                     <span
                         className={`rounded-full px-3 py-1 text-xs font-semibold capitalize
