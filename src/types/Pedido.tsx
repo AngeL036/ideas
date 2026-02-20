@@ -1,10 +1,11 @@
 export interface PedidoItem{
-    id:number;
-    usuario_id:number;
-    direccion_envio:string;
-    total:number;
-    estado:string;
-    create_at:string;
+    id:number
+    negocio_id:number
+    mesa_id:number
+    mesero_id:number
+    total:number
+    estado:string
+    created_at:string
 }
 export interface pedido{
     id:number;
@@ -13,10 +14,23 @@ export interface pedido{
 }
 
 export interface PedidoCreatePayload{
-    items: PedidoItem[];
+    items: PedidoCreateItem[];
     total: number;
     user_id:number
+    mesa_numero?: number;
+}
+export interface PedidoMesa{
+    items:PedidoCreateItem[];
+    user_id:number;
+    mesa_id:number;
 } 
+
+export interface PedidoCreateItem{
+    platillo_id:number;
+    cantidad:number;
+    nombre?:string;
+    precio?:number;
+}
 
 export interface PedidoResponse{
     message:string;

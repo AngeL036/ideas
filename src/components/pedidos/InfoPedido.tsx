@@ -16,11 +16,11 @@ export default function InfoPedido({ pedido }: Props) {
 
         <div className="mt-4 space-y-1 text-sm text-slate-600">
           <p className="font-semibold text-emerald-600">Total: ${pedido.total}</p>
-          <p>{pedido.direccion_envio}</p>
+          <p>{pedido.mesero_id}</p>
         </div>
 
         <p className="mt-4 text-xs text-slate-500">
-          {new Date(pedido.create_at).toLocaleString("es-MX", {
+          {new Date(pedido.created_at).toLocaleString("es-MX", {
             dateStyle: "medium",
             timeStyle: "short",
           })}

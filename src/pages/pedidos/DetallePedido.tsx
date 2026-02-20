@@ -26,7 +26,7 @@ export default function DetallePedido() {
 
         const [detallesData, userData] = await Promise.all([
           ObtenerDetalleId(pedidoId),
-          ObtenerUser(pedidoData.usuario_id),
+          ObtenerUser(pedidoData.mesero_id),
         ]);
 
         setDetalles(detallesData);

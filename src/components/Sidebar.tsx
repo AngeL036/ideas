@@ -1,5 +1,6 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaHome, FaUtensils, FaClipboardList, FaChair, FaSignOutAlt } from "react-icons/fa";
+import { FaHome, FaUtensils, FaClipboardList, FaChair, FaSignOutAlt, FaUser, FaStore } from "react-icons/fa";
+
 
 export default function Sidebar() {
   const location = useLocation();
@@ -17,6 +18,8 @@ export default function Sidebar() {
     { name: "Menu", path: "/comida", icon: <FaUtensils /> },
     { name: "Ordenes", path: "/pedidos", icon: <FaClipboardList /> },
     { name: "Mesas", path: "/mesas", icon: <FaChair /> },
+    { name: "Empleados", path: "/empleados", icon: <FaUser />},
+    { name: "Negocios", path: "/negocios", icon:<FaStore />},
   ];
   const cerrarSesion = () => {
     localStorage.removeItem("token");

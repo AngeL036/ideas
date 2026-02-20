@@ -2,7 +2,7 @@ import { obtenerPlatos } from "../../api/platillo.api";
 import { useEffect, useState } from "react";
 import type { PlatilloPayload } from "../../types/Platillo";
 import PedidoCard from "../../components/pedidos/PedidoCard";
-
+import Carrito from "../carrito/Carrito"
 export default function PedidoNuevo() {
   const [comidas, setComidas] = useState<PlatilloPayload[]>([]);
   const [loading, setLoading] = useState(true);
@@ -36,7 +36,6 @@ export default function PedidoNuevo() {
         <h1 className="text-3xl font-black tracking-tight text-slate-900">Nuevo pedido</h1>
         <p className="mt-1 text-sm text-slate-600">Selecciona productos para armar una orden y enviarla al carrito.</p>
       </header>
-
       {comidas.length === 0 ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
           <p className="text-lg text-slate-500">No hay platillos registrados.</p>

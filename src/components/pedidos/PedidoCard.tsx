@@ -4,13 +4,15 @@ import Swal from "sweetalert2";
 
 interface Props {
   comida: PlatilloPayload;
+  onAdded?: () => void;
+  storageKey?: string;
 }
 
-export default function PedidoCard({ comida }: Props) {
+export default function PedidoCard({ comida, onAdded, storageKey = "carrito" }: Props) {
   const [contador, setContador] = useState(1);
 
   const agregarAlCarrito = () => {
-    const carrito = JSON.parse(localStorage.getItem("carrito") || "[]");
+    const carrito = JSON.parse(localStorage.getItem(storageKey) || "[]");
     const existe = carrito.find((item: any) => item.id === comida.id);
 
     if (existe) {
@@ -24,7 +26,8 @@ export default function PedidoCard({ comida }: Props) {
       });
     }
 
-    localStorage.setItem("carrito", JSON.stringify(carrito));
+    localStorage.setItem(storageKey, JSON.stringify(carrito));
+    onAdded?.();
     Swal.fire({
       icon: "success",
       title: "Agregado",
