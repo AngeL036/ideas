@@ -3,12 +3,17 @@ import { useParams } from "react-router-dom";
 import type {Mesa} from "../../types/Mesa"
 import {ObtenerMesaId} from "../../api/mesa.api"
 import { Link } from "react-router-dom";
+import { ObtenerPedidosMesa } from "../../api/pedido.api";
+import { Detalle } from "../../types/Pedido";
+import ListaProductos from "../../components/mesas/ListaProductos";
 
 export default function DetallesMesa() {
   const { id } = useParams();
   const [estado, setEstado] = useState("libre");
   const [personas, setPersonas] = useState<number | "">("");
   const [mesa, setMesa] = useState<Mesa>();
+  const [detalles, setDetalles ] = useState<Detalle[]>([]);
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const carga = async () => {
@@ -20,6 +25,18 @@ export default function DetallesMesa() {
       }
     }
     carga();
+  },[id])
+
+  useEffect(() => {
+    const pedidos = async () => {
+      try{
+        const data = await ObtenerPedidosMesa(Number(id));
+        setDetalles(data);
+      }finally {
+        setLoading(false)
+      }
+    }
+    pedidos();
   },[id])
 
   const colorEstado =
@@ -84,11 +101,21 @@ export default function DetallesMesa() {
 
         <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2">
           <h2 className="border-b border-slate-200 pb-2 text-2xl font-bold text-slate-900">Productos pedidos</h2>
+          {detalles.length === 0 ? (
+            <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+              <p className="text-lg text-slate-500">No hay pedidos</p>
+            </div>
+          ):(
+            <div className="flex items-center justify-between rounded-xl bg-slate-50 p-3">
+              {detalles.map((detalle) => (
+                <ListaProductos
+                key={detalle.id}
+                detalle={detalle} />
+              ))}
 
-          <div className="flex items-center justify-between rounded-xl bg-slate-50 p-3">
-            <span className="font-medium text-slate-700">2 x Hamburguesa</span>
-            <span className="font-semibold text-slate-800">$240</span>
-          </div>
+            </div>
+          )}
+          
 
           <div className="flex items-center justify-between border-t border-slate-200 pt-4">
             <span className="text-lg font-bold text-slate-800">Total</span>

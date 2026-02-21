@@ -23,3 +23,9 @@ export const ObtenerDetalleId = async(id:number): Promise<Detalle[]> => {
     const response = await api.get(`/pedidos/${id}`)
     return response.data
 }
+
+export const ObtenerPedidosMesa = async(mesa_id:number): Promise<Detalle[]> => {
+    const response = await api.get(`/pedidos/mesa/${mesa_id}`)
+    return response.data
+}
+

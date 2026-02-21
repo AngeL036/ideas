@@ -28,6 +28,11 @@ export const eliminarPlato = async(id:number):Promise<ResponsePayload> => {
 }
 
 export const actualizarActivo = async(id:number, activo: boolean) => {
-    const res = await api.patch(`/platos/${id}/activo`, { activo });
+    const res = await api.patch(`/platos/${id}/activo`, { activo })
     return res.data
+}
+
+export const ObtenerDetallePlatillo = async(plato_id:number): Promise<PlatilloPayload> => {
+    const response = await api.get(`/platos/${plato_id}/negocio`)
+    return response.data
 }
