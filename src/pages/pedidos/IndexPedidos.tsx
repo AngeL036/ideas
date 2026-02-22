@@ -7,10 +7,11 @@ import { ObtenerPedidos } from "../../api/pedido.api";
 export default function IndexPedidos() {
   const [pedidos, setPedidos] = useState<PedidoItem[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refresh, setRefresh] = useState(0);
 
   useEffect(() => {
     CargarPedidos();
-  }, []);
+  }, [refresh]);
 
   const CargarPedidos = async () => {
     try {
@@ -22,6 +23,10 @@ export default function IndexPedidos() {
       setLoading(false);
     }
   };
+
+  const handleStatusChange = () => {
+    setRefresh(prev => prev + 1);
+  }
 
   if (loading) {
     return (
@@ -55,7 +60,11 @@ export default function IndexPedidos() {
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {pedidos.map((pedido) => (
-            <InfoPedido key={pedido.id} pedido={pedido} />
+            <InfoPedido 
+              key={pedido.id} 
+              pedido={pedido} 
+              onStatusChange={handleStatusChange}
+            />
           ))}
         </div>
       )}

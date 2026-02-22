@@ -7,14 +7,15 @@ interface Props{
 }
 
 export default function ListaProductos({detalle}:Props){
-    const [platillos, setPlatillos] = useState<PlatilloPayload>();
+    const [platillos, setPlatillos] = useState<PlatilloPayload | null>(null);
     useEffect (() => {
         const cargaDetalles = async () => {
             const data = await ObtenerDetallePlatillo(Number(detalle.platillo_id))
             setPlatillos(data)
         }
         cargaDetalles() 
-    },[])
+    },[detalle.platillo_id])
+    
     return(
         <div>
             <span className="font-medium text-slate-700">{platillos?.nombre}</span>

@@ -2,12 +2,22 @@ export interface MesasPayload{
     id:number;
     estado:string;
 }
+
 export interface Mesa{
-    numero: number
-    capacidad:number
-    estado:string
+    id: number;
+    numero: number;
+    capacidad: number;
+    estado: string;
+    created_at: string;
 }
 
 export interface createMesaPayload {
-    capacidad: number
+    negocio_id: number;
+    numero: number;
+    capacidad: number;
+}
+
+export interface UpdateMesaPayload {
+    numero?: number;
+    capacidad?: number;
 }

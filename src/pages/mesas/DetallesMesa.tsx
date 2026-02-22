@@ -4,7 +4,7 @@ import type {Mesa} from "../../types/Mesa"
 import {ObtenerMesaId} from "../../api/mesa.api"
 import { Link } from "react-router-dom";
 import { ObtenerPedidosMesa } from "../../api/pedido.api";
-import { Detalle } from "../../types/Pedido";
+import { DetalleOut } from "../../types/Pedido";
 import ListaProductos from "../../components/mesas/ListaProductos";
 
 export default function DetallesMesa() {
@@ -12,7 +12,7 @@ export default function DetallesMesa() {
   const [estado, setEstado] = useState("libre");
   const [personas, setPersonas] = useState<number | "">("");
   const [mesa, setMesa] = useState<Mesa>();
-  const [detalles, setDetalles ] = useState<Detalle[]>([]);
+  const [detalles, setDetalles ] = useState<DetalleOut[]>([]);
   const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
@@ -46,6 +46,7 @@ export default function DetallesMesa() {
       ? "bg-rose-100 text-rose-700"
       : "bg-amber-100 text-amber-700";
 
+      const total = detalles.reduce((acc, d) => acc + d.cantidad * d.precio_unitario,0);
   return (
     <div className="space-y-6">
       <header className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur md:p-8">
@@ -106,20 +107,33 @@ export default function DetallesMesa() {
               <p className="text-lg text-slate-500">No hay pedidos</p>
             </div>
           ):(
-            <div className="flex items-center justify-between rounded-xl bg-slate-50 p-3">
-              {detalles.map((detalle) => (
-                <ListaProductos
-                key={detalle.id}
-                detalle={detalle} />
-              ))}
+            <div className="space-y-3">
+              {detalles.map((d) => (
+                <div
+                  key={d.id}
+                  className="flex items-center justify-between rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 hover:bg-white transition"
+                >
+                  <div>
+                    <p className="font-semibold text-slate-800">
+                      {d.platillo.nombre}
+                    </p>
+                    <p className="text-sm text-slate-500">
+                      {d.cantidad} x ${d.precio_unitario}
+                    </p>
+                  </div>
 
+                  <div className="text-right">
+                    <p className="font-bold text-slate-900">
+                      ${(d.cantidad * d.precio_unitario).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
-          
-
           <div className="flex items-center justify-between border-t border-slate-200 pt-4">
             <span className="text-lg font-bold text-slate-800">Total</span>
-            <span className="text-lg font-black text-emerald-600">$280</span>
+            <span className="text-lg font-black text-emerald-600">${total}</span>
           </div>
         </section>
       </div>

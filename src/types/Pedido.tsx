@@ -26,10 +26,8 @@ export interface PedidoMesa{
 } 
 
 export interface PedidoCreateItem{
-    platillo_id:number;
-    cantidad:number;
-    nombre?:string;
-    precio?:number;
+    platillo_id: number;
+    cantidad: number;
 }
 
 export interface PedidoResponse{
@@ -50,4 +48,15 @@ export interface Detalle{
 export interface DetallePedido{
     detalle_items:Detalle[];
     
+}
+
+export interface DetalleOut {
+  id:number
+  cantidad:number
+  precio_unitario:number
+  platillo:{
+    id:number
+    nombre:string
+    precio:number
+  }
 }

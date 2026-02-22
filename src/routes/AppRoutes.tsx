@@ -20,7 +20,9 @@ import AgregarMesa from '../pages/mesas/AgregarMesa'
 import IndexEmpleados from '../pages/empleados/IndexEmpleados'
 import PedidoNuevoMesa from '../pages/pedidos/PedidoNuevoMesa'
 import NegocioIndex from '../pages/negocios/NegocioIndex'
-import FormNegocio from '../components/negocios/FormNegocio'
+import AgregarNegocio from '../pages/negocios/AgregarNegocio'
+import EditarNegocio from '../pages/negocios/EditarNegocio'
+import IndexPagos from '../pages/pagos/IndexPagos'
 
 export default function AppRoutes(){
     return(
@@ -58,7 +60,10 @@ export default function AppRoutes(){
                 <Route path='/empleados' element={<IndexEmpleados /> } />
 
                 <Route path='/negocios' element={<NegocioIndex />} />
-                <Route path='/negocio/nuevo' element={ <FormNegocio/>} />
+                <Route path='/negocio/nuevo' element={<AgregarNegocio/>} />
+                <Route path='/negocio/:id/editar' element={<EditarNegocio />} />
+
+                <Route path='/pagos' element={<IndexPagos />} />
             </Route>
         </Routes>
     
