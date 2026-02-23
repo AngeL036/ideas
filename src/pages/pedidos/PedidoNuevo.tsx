@@ -1,4 +1,4 @@
-import { obtenerPlatos } from "../../api/platillo.api";
+import { obtenerPlatos, obtenerPlatosActivos } from "../../api/platillo.api";
 import { useEffect, useState } from "react";
 import type { PlatilloPayload } from "../../types/Platillo";
 import PedidoCard from "../../components/pedidos/PedidoCard";
@@ -13,7 +13,7 @@ export default function PedidoNuevo() {
 
   const cargarComidas = async () => {
     try {
-      const data = await obtenerPlatos();
+      const data = await obtenerPlatosActivos();
       setComidas(data);
     } catch (error) {
       console.log("Error al cargar la comida", error);

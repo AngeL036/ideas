@@ -13,6 +13,11 @@ export const obtenerPlatos = async(): Promise<PlatilloPayload[]> => {
     return response.data
 }
 
+export const obtenerPlatosActivos = async(): Promise<PlatilloPayload[]> => {
+    const response = await api.get("/platos/activos");
+    return response.data
+}
+
 export const obtenerPlato = async(id:number):Promise<ResponsePayload> => {
     const response = await api.get(`/platos/${id}`)
     return response.data

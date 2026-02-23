@@ -1,9 +1,9 @@
-import { obtenerPlatos } from "../../api/platillo.api";
+import { obtenerPlatos, obtenerPlatosActivos } from "../../api/platillo.api";
 import { useEffect, useState } from "react";
 import type { PlatilloPayload } from "../../types/Platillo";
 import PedidoCard from "../../components/pedidos/PedidoCard";
 import { useNavigate, useParams } from "react-router-dom";
-import { CrearPedidoMesa } from "../../api/pedido.api";
+import { agregarPlato } from "../../api/pedido.api";
 import type { PedidoMesa } from "../../types/Pedido";
 import Swal from "sweetalert2";
 
@@ -41,7 +41,7 @@ export default function PedidoNuevoMesa(){
 
   const cargarComidas = async () => {
     try {
-      const data = await obtenerPlatos();
+      const data = await obtenerPlatosActivos();
       setComidas(data);
     } catch (error) {
       console.log("Error al cargar la comida", error);
@@ -76,14 +76,13 @@ export default function PedidoNuevoMesa(){
         nombre: item.nombre,
         precio: item.precio,
       })),
-      user_id: user?.id,
       mesa_id: mesaNumero,
     };
     console.log(payload)
 
     try {
       setGuardandoPedido(true);
-      const response = await CrearPedidoMesa(payload);
+      const response = await agregarPlato(payload);
       localStorage.removeItem(carritoKey);
       setCarrito([]);
       Swal.fire("Pedido creado", response.message ?? `Orden registrada para la mesa #${mesaNumero}.`, "success");

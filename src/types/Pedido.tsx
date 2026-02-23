@@ -21,7 +21,6 @@ export interface PedidoCreatePayload{
 }
 export interface PedidoMesa{
     items:PedidoCreateItem[];
-    user_id:number;
     mesa_id:number;
 } 
 

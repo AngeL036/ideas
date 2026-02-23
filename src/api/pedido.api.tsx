@@ -10,6 +10,10 @@ export const CrearPedidoMesa = async(data:PedidoMesa): Promise<PedidoResponse> =
     const response = await api.post("/pedidos/create/",data);
     return response.data
 }
+export const agregarPlato = async (data:PedidoMesa):Promise<PedidoResponse> => {
+    const response = await api.post("/pedidos/mesa/",data);
+    return response.data
+}
 
 export const ObtenerPedidos = async(): Promise<PedidoItem[]> => {
     const response = await api.get("/pedidos/");
