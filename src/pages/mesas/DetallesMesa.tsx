@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import type {Mesa} from "../../types/Mesa"
 import {ObtenerMesaId} from "../../api/mesa.api"
 import { Link } from "react-router-dom";
 import { ObtenerPedidosMesa } from "../../api/pedido.api";
 import { DetalleOut } from "../../types/Pedido";
-import ListaProductos from "../../components/mesas/ListaProductos";
+import { CerrarCuenta } from "../../api/pago.api";
+import Swal from "sweetalert2";
 
 export default function DetallesMesa() {
   const { id } = useParams();
@@ -14,6 +15,11 @@ export default function DetallesMesa() {
   const [mesa, setMesa] = useState<Mesa>();
   const [detalles, setDetalles ] = useState<DetalleOut[]>([]);
   const [loading, setLoading] = useState<boolean>(true)
+  const [cerrando, setCerrando] = useState<boolean>(false);
+  const [openPago, setOpenPago] = useState(false)
+  const [metodo, setMetodo] = useState<string>("efectivo")
+  const [recibido, setRecibido] = useState<number | "">("")
+  const navigate = useNavigate();
 
   useEffect(() => {
     const carga = async () => {
@@ -39,6 +45,29 @@ export default function DetallesMesa() {
     pedidos();
   },[id])
 
+  const confirmarPago = async () => {
+    if(!id || cerrando)  return;
+
+    setCerrando(true);
+
+    try{
+       await CerrarCuenta({
+        metodo:metodo,
+        mesa_id: Number(id),
+       })
+       await Swal.fire("Pago realizado","","success");
+       navigate("/mesas");
+    }catch(e){
+      Swal.fire({
+        title: "Error",
+        text: "Hubo un error al cerrar la cuenta. Por favor, intenta nuevamente.",
+        icon: "error",
+        confirmButtonText: "Aceptar"
+      });
+    }finally {
+      setCerrando(false);
+    }
+  }
   const colorEstado =
     estado === "libre"
       ? "bg-emerald-100 text-emerald-700"
@@ -55,7 +84,10 @@ export default function DetallesMesa() {
       </header>
 
       <div className="flex flex-wrap gap-3">
-        <button disabled={estado === "libre"} className="rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50">
+        <button 
+          disabled={estado === "libre" || cerrando}
+          onClick={() => setOpenPago(true)} 
+          className="rounded-xl bg-rose-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50">
           Cerrar cuenta
         </button>
           <Link
@@ -85,7 +117,7 @@ export default function DetallesMesa() {
               className="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-slate-900 outline-none transition focus:border-slate-400 focus:bg-white"
             />
           </div>
-
+          {/*
           <div>
             <label className="block text-sm font-semibold text-slate-600">Cambiar estado</label>
             <select
@@ -98,6 +130,7 @@ export default function DetallesMesa() {
               <option value="reservado">Reservado</option>
             </select>
           </div>
+          * */}
         </section>
 
         <section className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm lg:col-span-2">
@@ -137,6 +170,54 @@ export default function DetallesMesa() {
           </div>
         </section>
       </div>
+      {openPago && (
+      <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+      <div className="bg-white rounded-2xl p-6 w-[420px] space-y-4">
+
+        <h2 className="text-xl font-bold">Pago</h2>
+
+        <p className="font-semibold">Total: ${total}</p>
+
+        <select
+          value={metodo}
+          onChange={(e)=>setMetodo(e.target.value)}
+          className="w-full border rounded p-2"
+        >
+          <option value="efectivo">Efectivo</option>
+          <option value="tarjeta">Tarjeta</option>
+        </select>
+
+        <input
+          type="number"
+          value={recibido}
+          onChange={(e)=>setRecibido(Number(e.target.value))}
+          placeholder="Monto recibido"
+          className="w-full border rounded p-2"
+        />
+
+        <p className="font-bold">
+          Cambio: ${Math.max(Number(recibido) - total, 0)}
+        </p>
+
+        <div className="flex gap-2">
+          <button
+            className="flex-1 border rounded p-2"
+            onClick={()=>setOpenPago(false)}
+          >
+            Cancelar
+          </button>
+
+          <button
+            className="flex-1 bg-emerald-600 text-white rounded p-2"
+            onClick={confirmarPago}
+          >
+            Confirmar pago
+          </button>
+        </div>
+
+      </div>
+    </div>
+      )}
     </div>
   );
 }

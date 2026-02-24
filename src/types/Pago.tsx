@@ -18,3 +18,8 @@ export interface ResumenPago {
     faltante: number;
     estado: string; // "abierto" | "parcial" | "pagado"
 }
+
+export interface PedidoPago {
+    metodo: string;
+    mesa_id :number;
+}

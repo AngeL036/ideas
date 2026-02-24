@@ -1,5 +1,5 @@
 import api from "./api";
-import type { Pago, PagoCreatePayload, ResumenPago } from "../types/Pago";
+import type { Pago, PagoCreatePayload, PedidoPago, ResumenPago } from "../types/Pago";
 
 export const registrarPago = async (pedido_id: number, data: PagoCreatePayload): Promise<{ message: string }> => {
     const response = await api.post(`/pagos/pedido/${pedido_id}/pagar`, data);
@@ -20,3 +20,8 @@ export const obtenerResumenPedido = async (pedido_id: number): Promise<ResumenPa
     const response = await api.get(`/pagos/pedido/${pedido_id}/resumen`);
     return response.data;
 };
+
+export const CerrarCuenta  = async (data:PedidoPago) => {
+    const response = await api.post(`/pagos/cerrar`, data);
+    return response.data
+}
