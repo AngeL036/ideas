@@ -47,13 +47,22 @@ export default function DetallesMesa() {
 
   const confirmarPago = async () => {
     if(!id || cerrando)  return;
-
+    if( Number(recibido) < total ){
+      Swal.fire({
+        title: "Error",
+        text: "El monto recibido es menor al total a pagar.",
+        icon: "error",
+        confirmButtonText: "Aceptar"
+      });
+      return;
+    }
     setCerrando(true);
 
     try{
        await CerrarCuenta({
         metodo:metodo,
         mesa_id: Number(id),
+        monto: Number(recibido)
        })
        await Swal.fire("Pago realizado","","success");
        navigate("/mesas");

@@ -22,4 +22,5 @@ export interface ResumenPago {
 export interface PedidoPago {
     metodo: string;
     mesa_id :number;
+    monto: number;
 }

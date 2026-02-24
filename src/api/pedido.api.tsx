@@ -1,5 +1,5 @@
 import api from "./api";
-import type { PedidoCreatePayload,PedidoResponse,PedidoItem,Detalle, PedidoMesa, DetalleOut, PedidoPago} from "../types/Pedido";
+import type { PedidoCreatePayload,PedidoResponse,PedidoItem,Detalle, PedidoMesa, DetalleOut} from "../types/Pedido";
 
 export const CrearPedido = async(data:PedidoCreatePayload): Promise<PedidoResponse> => {
     const response = await api.post("/pedidos/", data);
