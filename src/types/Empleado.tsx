@@ -8,8 +8,10 @@ export interface Empleado {
 }
 
 export interface CreateEmpleadoPayload {
-    user_id: number;
-    negocio_id: number;
+    nombre: string;
+    apellido: string;
+    edad: number;
+    email: string;
     rol: string;
 }
 
