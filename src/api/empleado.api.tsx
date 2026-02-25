@@ -1,7 +1,7 @@
 import api from "./api";
-import type { Empleado, CreateEmpleadoPayload, UpdateEmpleadoPayload, EmpleadoConUsuario } from "../types/Empleado";
+import type { Empleado, CreateEmpleadoPayload, UpdateEmpleadoPayload, EmpleadoConUsuario,EmpleadoCreadoResponse} from "../types/Empleado";
 
-export const crearEmpleado = async (data: CreateEmpleadoPayload): Promise<Empleado & { temp_password?: string }> => {
+export const crearEmpleado = async (data: CreateEmpleadoPayload): Promise<EmpleadoCreadoResponse> => {
     const response = await api.post("/empleados/", data);
     return response.data;
 };

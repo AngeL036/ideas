@@ -1,11 +1,57 @@
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import Sidebar from "../components/Sidebar";
+import { useEffect, useState } from "react";
+import { obtenerMisNegocios } from "../api/negocio.api";
 
 export default function PrivateLayout() {
   const token = localStorage.getItem("token");
 
+  const navigate = useNavigate();
+  const [checking, setChecking] = useState(true);
+
   if (!token) {
     return <Navigate to="/login" replace />;
+  }
+
+  useEffect(() => {
+    // only owners can create/have businesses
+    // get user from localStorage to check role
+    const userStr = localStorage.getItem("user");
+    let userRole = "";
+    
+    try {
+      const user = userStr ? JSON.parse(userStr) : null;
+      userRole = user?.role?.toLowerCase() || "";
+    } catch (err) {
+      console.error("Error parsing user", err);
+    }
+
+    const isOwner = userRole === "owner";
+
+    // if owner, verify they have at least one business
+    if (isOwner) {
+      async function checkNegocios() {
+        try {
+          const negocios = await obtenerMisNegocios();
+          if (!negocios || negocios.length === 0) {
+            navigate("/negocio/nuevo", { replace: true });
+          }
+        } catch (err) {
+          console.error("Error checking negocios", err);
+        } finally {
+          setChecking(false);
+        }
+      }
+      checkNegocios();
+    } else {
+      // non-owners can access the app normally, just no business management
+      setChecking(false);
+    }
+  }, [navigate]);
+
+  if (checking) {
+    // optionally show nothing or a loader while we check
+    return null;
   }
 
   return (

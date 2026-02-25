@@ -26,3 +26,9 @@ export interface EmpleadoConUsuario extends Empleado {
         email: string;
     };
 }
+
+export interface EmpleadoCreadoResponse {
+    message: string;
+    empleado: Empleado;
+    temporal_password: string;
+}

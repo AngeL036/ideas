@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { LoginUser } from "../../api/User.api";
+import { obtenerMisNegocios } from "../../api/negocio.api";
 import type { LoginUserPayload, LoginUserResponse } from "../../types/User";
 
 const getAuthToken = (response: LoginUserResponse) =>
@@ -22,7 +23,7 @@ export default function Login() {
 
       localStorage.setItem("token", token);
 
-      const storedUser = response.user ?? { email: response.email ?? data.email };
+      const storedUser = response.user ?? { email: response.email ?? data.email, role: "employee" };
       localStorage.setItem("user", JSON.stringify(storedUser));
 
       await Swal.fire({
@@ -33,7 +34,27 @@ export default function Login() {
         showConfirmButton: false,
       });
 
-      navigate("/", { replace: true });
+      // check if user is owner
+      const userRole = (storedUser as any)?.role?.toLowerCase?.();
+      const isOwner = userRole === "owner";
+
+      // if owner and has no businesses, redirect to create one
+      if (isOwner) {
+        try {
+          const negocios = await obtenerMisNegocios();
+          if (!negocios || negocios.length === 0) {
+            navigate("/negocio/nuevo", { replace: true });
+          } else {
+            navigate("/", { replace: true });
+          }
+        } catch (err) {
+          console.error("Error al obtener negocios", err);
+          navigate("/", { replace: true });
+        }
+      } else {
+        // non-owner users go directly to dashboard
+        navigate("/", { replace: true });
+      }
     } catch (error) {
       console.error("Error al iniciar sesion", error);
       Swal.fire("Error", "Credenciales invalidas o servidor no disponible", "error");

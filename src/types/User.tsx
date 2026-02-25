@@ -20,6 +20,7 @@ export interface LoginUserResponse {
 export interface DetalleUser {
     id:number;
     email:string;
+    role?: string;
     created_at:string;
-
+     // 'owner', 'employee', etc.
 }
