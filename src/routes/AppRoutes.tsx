@@ -23,6 +23,8 @@ import NegocioIndex from '../pages/negocios/NegocioIndex'
 import AgregarNegocio from '../pages/negocios/AgregarNegocio'
 import EditarNegocio from '../pages/negocios/EditarNegocio'
 import IndexPagos from '../pages/pagos/IndexPagos'
+import { ProtectedRoute } from '../components/ProtectedRoute'
+import TestRoleProtection from '../pages/TestRoleProtection'
 
 export default function AppRoutes(){
     return(
@@ -34,36 +36,49 @@ export default function AppRoutes(){
 
         <Route element={<PrivateLayout />}>
             <Route path="/" element={<Dashboard/>}/>
+            
+            {/* RUTA DE PRUEBA - ELIMINAR EN PRODUCCIÓN */}
+            {/*<Route path='/test-roles' element={<TestRoleProtection />} />*/}
 
                 {/**  <Route path='/comidas' element={<Index />} />*/} 
-                <Route path='/comida/nueva' element={<AgregarComida/>} />
-                <Route path='/comida' element={<ListaComida />} />
-                <Route path='/comida/editar/:id' element={<EditarComida />} />
+                {/* Comidas - Solo Admin y Owner */}
+                <Route path='/comida/nueva' element={<ProtectedRoute allowedRoles={['admin', 'owner']}><AgregarComida/></ProtectedRoute>} />
+                <Route path='/comida' element={<ProtectedRoute allowedRoles={['admin', 'owner', 'mesero']}><ListaComida /></ProtectedRoute>} />
+                <Route path='/comida/editar/:id' element={<ProtectedRoute allowedRoles={['admin', 'owner']}><EditarComida /></ProtectedRoute>} />
 
-                <Route path='/pedidos' element={<IndexPedidos />} />
-                <Route path='/pedido/nuevo' element={<PedidoNuevo />} />
-                <Route path='/detalle/pedido/:id' element={<DetallePedido /> } />
-                <Route path='/pedido/nuevo/:id' element={<PedidoNuevoMesa />} />
+                {/* Pedidos - Todos los roles */}
+                <Route path='/pedidos' element={<ProtectedRoute allowedRoles={['admin', 'owner', 'mesero']}><IndexPedidos /></ProtectedRoute>} />
+                <Route path='/pedido/nuevo' element={<ProtectedRoute allowedRoles={['admin', 'owner', 'mesero']}><PedidoNuevo /></ProtectedRoute>} />
+                <Route path='/detalle/pedido/:id' element={<ProtectedRoute allowedRoles={['admin', 'owner', 'mesero']}><DetallePedido /> </ProtectedRoute>} />
+                <Route path='/pedido/nuevo/:id' element={<ProtectedRoute allowedRoles={['admin', 'owner', 'mesero']}><PedidoNuevoMesa /></ProtectedRoute>} />
 
-                <Route path='/ventas' element={< IndexVenta/>} />
+                {/* Ventas - Solo Admin y Owner */}
+                <Route path='/ventas' element={<ProtectedRoute allowedRoles={['admin', 'owner']}><IndexVenta/></ProtectedRoute>} />
 
-                <Route path='/estadisticas' element={<IndexEstadisticas />} />
+                {/* Estadísticas - Solo Admin y Owner */}
+                <Route path='/estadisticas' element={<ProtectedRoute allowedRoles={['admin', 'owner']}><IndexEstadisticas /></ProtectedRoute>} />
 
-                <Route path='/carrito' element={<Carrito />}/>
+                {/* Carrito - Todos los roles */}
+                <Route path='/carrito' element={<ProtectedRoute allowedRoles={['admin', 'owner', 'mesero']}><Carrito /></ProtectedRoute>}/>
 
-                <Route path='/perfil' element={<PerfilIndex />} />
+                {/* Perfil - Todos los roles */}
+                <Route path='/perfil' element={<ProtectedRoute allowedRoles={['admin', 'owner', 'mesero']}><PerfilIndex /></ProtectedRoute>} />
 
-                <Route path='/mesas' element={<IndexMesas />}/>
-                <Route path='/mesa/nuevo' element={<AgregarMesa />} />
-                <Route path='/mesa/editar/:id' element={<DetallesMesa/>} />
+                {/* Mesas - Todos los roles (con restricciones de funcionalidad por rol) */}
+                <Route path='/mesas' element={<ProtectedRoute allowedRoles={['admin', 'owner', 'mesero']}><IndexMesas /></ProtectedRoute>}/>
+                <Route path='/mesa/nuevo' element={<ProtectedRoute allowedRoles={['admin', 'owner']}><AgregarMesa /></ProtectedRoute>} />
+                <Route path='/mesa/editar/:id' element={<ProtectedRoute allowedRoles={['admin', 'owner']}><DetallesMesa/></ProtectedRoute>} />
 
-                <Route path='/empleados' element={<IndexEmpleados /> } />
+                {/* Empleados - Solo Admin y Owner */}
+                <Route path='/empleados' element={<ProtectedRoute allowedRoles={['admin', 'owner']}><IndexEmpleados /> </ProtectedRoute>} />
 
-                <Route path='/negocios' element={<NegocioIndex />} />
-                <Route path='/negocio/nuevo' element={<AgregarNegocio/>} />
-                <Route path='/negocio/:id/editar' element={<EditarNegocio />} />
+                {/* Negocios - Solo Owner */}
+                <Route path='/negocios' element={<ProtectedRoute allowedRoles={['owner']}><NegocioIndex /></ProtectedRoute>} />
+                <Route path='/negocio/nuevo' element={<ProtectedRoute allowedRoles={['owner']}><AgregarNegocio/></ProtectedRoute>} />
+                <Route path='/negocio/:id/editar' element={<ProtectedRoute allowedRoles={['owner']}><EditarNegocio /></ProtectedRoute>} />
 
-                <Route path='/pagos' element={<IndexPagos />} />
+                {/* Pagos - Solo Admin y Owner */}
+                <Route path='/pagos' element={<ProtectedRoute allowedRoles={['admin', 'owner']}><IndexPagos /></ProtectedRoute>} />
             </Route>
         </Routes>
     
