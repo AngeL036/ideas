@@ -1,9 +1,9 @@
 import { useState } from "react";
 import FormEmpleado from "../../components/empleados/FormEmpleado";
-
+import ListarEmpleados from "../../components/empleados/ListaEmpleados";
 export default function IndexEmpleados(){
     const [showForm, setShowForm] = useState(false);
-
+    
     return(
         <div className="space-y-6">
             <header className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur md:p-8">
@@ -30,7 +30,7 @@ export default function IndexEmpleados(){
 
             <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
                 <h2 className="text-lg font-bold text-slate-900">Lista de Empleados</h2>
-                <p className="mt-1 text-sm text-slate-600">Aquí aparecerá la lista de empleados (funcionalidad en desarrollo).</p>
+                <ListarEmpleados />
             </div>
         </div>
     )

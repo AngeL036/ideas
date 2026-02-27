@@ -2,21 +2,18 @@ import { useEffect, useState } from "react";
 import type { Empleado } from "../../types/Empleado";
 import { obtenerEmpleados, desactivarEmpleado } from "../../api/empleado.api";
 
-interface Props {
-    negocio_id: number;
-}
 
-export default function ListaEmpleados({ negocio_id }: Props) {
+export default function ListaEmpleados() {
     const [empleados, setEmpleados] = useState<Empleado[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         cargarEmpleados();
-    }, [negocio_id]);
+    }, []);
 
     const cargarEmpleados = async () => {
         try {
-            const data = await obtenerEmpleados(negocio_id);
+            const data = await obtenerEmpleados();
             setEmpleados(data);
         } catch (error) {
             console.error("Error al cargar empleados", error);

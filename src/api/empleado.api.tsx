@@ -6,8 +6,8 @@ export const crearEmpleado = async (data: CreateEmpleadoPayload): Promise<Emplea
     return response.data;
 };
 
-export const obtenerEmpleados = async (negocio_id: number): Promise<Empleado[]> => {
-    const response = await api.get(`/empleados/${negocio_id}`);
+export const obtenerEmpleados = async (): Promise<Empleado[]> => {
+    const response = await api.get(`/empleados/`);
     return response.data;
 };
 
