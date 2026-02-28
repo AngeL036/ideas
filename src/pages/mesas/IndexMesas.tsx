@@ -3,12 +3,12 @@ import ContadorMesas from "../../components/mesas/ContadorMesas";
 import Mesas from "../../components/mesas/Mesas";
 import type { Mesa } from "../../types/Mesa";
 import { obtenerMesas } from "../../api/mesa.api";
-import { Link } from "react-router-dom";
-
+import { CrearMesa } from "../../api/mesa.api";
+import Swal from "sweetalert2";
 export default function IndexMesas() {
   const [mesas,setMesas] = useState<Mesa[]>([])
   const [loading,setLoading] = useState(true)
-
+  const [mesaNueva, setMesaNueva ] = useState<Mesa | null>(null);
   {/*
   const mesas = [
     { id: 1, estado: "ocupada" },
@@ -30,6 +30,19 @@ export default function IndexMesas() {
       console.error("error al cargar las mesas", error);
     }finally{
       setLoading(false)
+    }
+  }
+  const handleAgregarMesa = async () => {
+    try{
+      const nuevaMesa = await CrearMesa();
+      setMesaNueva(nuevaMesa);
+      cargarMesas(); // Refresca la lista de mesas  
+    }catch(error){
+      Swal.fire({
+        icon: "error",
+        title: "Error al agregar mesa",
+        text: "Ocurrió un error al intentar agregar una nueva mesa. Por favor, intenta nuevamente.",
+      });
     }
   }
   
@@ -58,12 +71,12 @@ export default function IndexMesas() {
           <p className="mt-1 text-sm text-slate-600">Visualiza disponibilidad y carga operativa del salon.</p>
         </div>
       
-        <Link
-          to="/mesa/nuevo"
+        <button
+        onClick={() => handleAgregarMesa()}
           className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
           >
             Agregar Mesa
-        </Link>
+        </button>
       </div>
       </header>
 

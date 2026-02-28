@@ -1,11 +1,9 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { obtenerMesasOcupadas } from "../api/estadisticas.api";
+import type { MesasOcupadasResponse } from "../types/Estadisticas";
 
-const stats = [
-  { title: "Ventas del dia", value: "$1,500", tone: "text-emerald-600" },
-  { title: "Pedidos activos", value: "18", tone: "text-sky-600" },
-  { title: "Mesas ocupadas", value: "12", tone: "text-rose-600" },
-  { title: "Ticket promedio", value: "$230", tone: "text-amber-600" },
-];
+
 
 const access = [
   { label: "Gestionar menu", path: "/comida" },
@@ -15,6 +13,25 @@ const access = [
 ];
 
 export default function Dashboard() {
+  const [datos, setDatos] = useState<MesasOcupadasResponse>();
+  useEffect(() => {
+    try {
+      const fetchMesasOcupadas = async () => {
+        const data = await obtenerMesasOcupadas();
+        setDatos(data);
+      }
+      fetchMesasOcupadas();
+    }catch (error) {
+      console.error("Error al obtener mesas ocupadas:", error);
+    }
+  }, []);
+
+  const stats = [
+  { title: "Ventas del dia", value: datos?.ventas_totales.toString() || "$0", tone: "text-emerald-600" },
+  { title: "Pedidos activos", value: datos?.pedidos_activos.toString() || "0", tone: "text-sky-600" },
+  { title: "Mesas ocupadas", value: datos?.mesas_ocupadas.toString() || "0", tone: "text-rose-600" },
+  { title: "Ticket promedio", value: datos?.ticket_promedio.toString() || "$0", tone: "text-amber-600" },
+];
   return (
     <div className="space-y-8">
       <section className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur md:p-8">

@@ -1,7 +1,8 @@
 import axios from "axios";
 
-const api = axios.create({
-    baseURL:"http://localhost:8000",
+{/* baseURL:"/api",*/}
+const api = axios.create({ 
+    baseURL : "http://localhost:8000",
     headers:{
          "Content-Type": "application/json",
     },
@@ -28,7 +29,7 @@ const tryRefreshToken = async (): Promise<string | null> => {
     if (!refreshToken) return null;
 
     try {
-        const res = await axios.post("http://localhost:8000/auth/refresh", { refresh_token: refreshToken });
+        const res = await axios.post("/auth/refresh", { refresh_token: refreshToken });
         const newToken = res.data?.access_token ?? res.data?.token ?? null;
         if (newToken) {
             localStorage.setItem("token", newToken);

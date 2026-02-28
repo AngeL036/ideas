@@ -8,8 +8,8 @@ export const obtenerMesas = async(): Promise<Mesa[]> => {
     return response.data
 }
 
-export const CrearMesa = async(data:createMesaPayload): Promise<Mesa> => {
-    const response = await api.post("/mesas/",data);
+export const CrearMesa = async(): Promise<Mesa> => {
+    const response = await api.post("/mesas/");
     return response.data
 }
 
