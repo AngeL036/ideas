@@ -29,7 +29,6 @@ export default function Carrito() {
       };
 
       const response = await CrearPedido(payload);
-      console.log(response.message);
     } catch (error) {
       console.error("Error al hacer el pedido", error);
     }

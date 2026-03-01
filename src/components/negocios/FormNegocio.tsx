@@ -10,7 +10,6 @@ export default function FormNegocio(){
     const onSubmit = async (data: CreateNegocioPayload) => {
         try {
             const response = await crearNegocio(data);
-            console.log(response);
             navigate("/negocios");
         } catch (error) {
             console.error("Error al crear negocio", error);

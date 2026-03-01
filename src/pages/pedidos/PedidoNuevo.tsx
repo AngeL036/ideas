@@ -16,7 +16,7 @@ export default function PedidoNuevo() {
       const data = await obtenerPlatosActivos();
       setComidas(data);
     } catch (error) {
-      console.log("Error al cargar la comida", error);
+      console.error("Error al cargar la comida", error);
     } finally {
       setLoading(false);
     }

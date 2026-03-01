@@ -5,7 +5,6 @@ import { registrarPlato } from "../../api/platillo.api";
 export default function AgregarComida(){
     const onSubmit = async (data: RegistrarPayload) => {
     try {
-        console.log("Datos enviados:", data);
         const register = await registrarPlato(data)
        
     }catch(error) {

@@ -10,7 +10,6 @@ export default function FormAgregarMesa(){
     const onSubmit = async () => {
         try {
               const response = await CrearMesa();
-              console.log(response);
               navigate("/mesas");
             } catch (error) {
               console.error("Error al crear mesa", error);
