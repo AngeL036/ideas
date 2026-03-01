@@ -50,6 +50,7 @@ export default function FormComida({ defaultValues, onSubmit, title, buttonText 
           <input
             type="number"
             step="0.01"
+            min="0"
             {...register("precio", {
               required: "El precio es obligatorio",
               min: {

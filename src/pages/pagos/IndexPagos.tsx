@@ -25,6 +25,7 @@ export default function IndexPagos() {
                     <div className="flex gap-2">
                         <input
                             type="number"
+                            min="0"
                             placeholder="ID del pedido"
                             onChange={(e) => setPedido_id(e.target.value ? Number(e.target.value) : null)}
                             className="flex-1 h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-slate-900 outline-none transition focus:border-slate-400 focus:bg-white"

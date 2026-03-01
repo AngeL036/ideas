@@ -44,6 +44,7 @@ export default function FormPago({ pedido_id, onSuccess }: Props) {
                 <input
                     type="number"
                     step="0.01"
+                    min="0"
                     placeholder="0.00"
                     {...register("monto", {
                         required: "El monto es requerido",

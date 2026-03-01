@@ -15,6 +15,7 @@ export default function Direccion() {
           Numero ext.
           <input
             type="number"
+            min="0"
             placeholder="Numero exterior"
             className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-slate-400 focus:bg-white"
           />
@@ -23,6 +24,7 @@ export default function Direccion() {
           Numero interior
           <input
             type="number"
+            min="0"
             placeholder="Numero interior"
             className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-slate-400 focus:bg-white"
           />
@@ -39,6 +41,7 @@ export default function Direccion() {
           Codigo postal
           <input
             type="number"
+            min="0"
             placeholder="CP"
             className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-slate-900 placeholder:text-slate-400 outline-none transition focus:border-slate-400 focus:bg-white"
           />

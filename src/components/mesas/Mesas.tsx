@@ -42,6 +42,7 @@ export default function Mesas({mesa}:Props){
                         {isOcupada ? "Mesa en uso" : "Disponible para nuevos clientes"}
                     </span>
                 </div>
+                
             </article>
         </Link>
     )

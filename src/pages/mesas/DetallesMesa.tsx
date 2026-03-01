@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import type {Mesa} from "../../types/Mesa"
-import {ObtenerMesaId} from "../../api/mesa.api"
+import {eliminarMesa, ObtenerMesaId} from "../../api/mesa.api"
 import { Link } from "react-router-dom";
 import { ObtenerPedidosMesa } from "../../api/pedido.api";
 import { DetalleOut } from "../../types/Pedido";
@@ -77,6 +77,34 @@ export default function DetallesMesa() {
       setCerrando(false);
     }
   }
+
+  const handleEliminar = async () => {
+    if(!id) return;
+    const confirm = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Esta acción no se puede deshacer.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar"
+    });
+    
+    if(confirm.isConfirmed){
+      try{
+        await eliminarMesa(Number(id));
+        Swal.fire("Mesa eliminada","","success");
+        navigate("/mesas");
+      }
+      catch(e){
+        Swal.fire({
+          title: "Error",
+          text: "Hubo un error al eliminar la mesa. Por favor, intenta nuevamente.",
+          icon: "error",
+          confirmButtonText: "Aceptar"
+        });
+      }
+    }
+  }
   const colorEstado =
     estado === "libre"
       ? "bg-emerald-100 text-emerald-700"
@@ -105,6 +133,11 @@ export default function DetallesMesa() {
           >
             Nuevo pedido
           </Link>
+          <button 
+          onClick={() => handleEliminar()}
+            className="rounded-xl bg-red-100 px-4 py-2 text-sm font-semibold text-red-700 ring-1 ring-red-200 hover:bg-red-200 transition">
+            Eliminar
+          </button>
       </div>
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
@@ -120,6 +153,7 @@ export default function DetallesMesa() {
             <label className="block text-sm font-medium text-slate-600">Numero de personas</label>
             <input
               type="number"
+              min="0"
               value={personas}
               onChange={(e) => setPersonas(e.target.value === "" ? "" : Number(e.target.value))}
               placeholder="Ej: 4"
@@ -198,6 +232,7 @@ export default function DetallesMesa() {
 
         <input
           type="number"
+          min="0"
           value={recibido}
           onChange={(e)=>setRecibido(Number(e.target.value))}
           placeholder="Monto recibido"

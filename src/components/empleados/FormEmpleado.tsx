@@ -60,6 +60,7 @@ export default function FormEmpleado() {
                 <label className="block text-sm font-medium text-slate-700">Edad</label>
                 <input
                     type="number"
+                    min="0"
                     placeholder="Ej: 30"
                     {...register("edad", {
                         required: "La edad es requerida",
