@@ -13,11 +13,6 @@ export const ObtenerUser = async (id:number): Promise<DetalleUser> => {
 }
 
 export const LoginUser = async (payload: LoginUserPayload): Promise<LoginUserResponse> => {
-    try {
-        const response = await api.post("/auth/login", payload);
-        return response.data;
-    } catch {
-        const fallbackResponse = await api.post("/auth/", payload);
-        return fallbackResponse.data;
-    }
+    const response = await api.post("/auth/login", payload);
+    return response.data;
 }
