@@ -24,6 +24,8 @@ import AgregarNegocio from '../pages/negocios/AgregarNegocio'
 import EditarNegocio from '../pages/negocios/EditarNegocio'
 import IndexPagos from '../pages/pagos/IndexPagos'
 import { ProtectedRoute } from '../components/ProtectedRoute'
+import VerificacionExitosa from '../pages/auth/VerificacionExitosa'
+import VerificacionError from '../pages/auth/VerificacionError'
 import TestRoleProtection from '../pages/TestRoleProtection'
 
 export default function AppRoutes(){
@@ -32,6 +34,9 @@ export default function AppRoutes(){
         <Route element={<PublicLayout />}>
             <Route path='/login' element={<Login />} />
             <Route path='/registro' element={<Register />} />
+
+            <Route path='/verificacion-exitosa' element={<VerificacionExitosa/>} />
+            <Route path='verificacion-error' element={<VerificacionError/>}/>
         </Route>
 
         <Route element={<PrivateLayout />}>

@@ -16,3 +16,8 @@ export const LoginUser = async (payload: LoginUserPayload): Promise<LoginUserRes
     const response = await api.post("/auth/login", payload);
     return response.data;
 }
+
+export const reenviarVerificacion = async (email:string) => {
+    const response = await api.post("auth/forward",{email});
+    return response.data
+}

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { LoginUser } from "../../api/User.api";
+import { LoginUser, reenviarVerificacion } from "../../api/User.api";
 import { obtenerMisNegocios } from "../../api/negocio.api";
 import type { LoginUserPayload, LoginUserResponse } from "../../types/User";
 
@@ -12,9 +12,14 @@ const getAuthToken = (response: LoginUserResponse) =>
 export default function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const { register, handleSubmit, formState: { isSubmitting } } = useForm<LoginUserPayload>();
 
   const onSubmit = async (data: LoginUserPayload) => {
+    if (loading) return;
+
+    setLoading(true);
+
     try {
       setError(""); // Limpiar error anterior
       localStorage.removeItem("token");
@@ -61,11 +66,40 @@ export default function Login() {
         // non-owner users go directly to dashboard
         navigate("/", { replace: true });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error al iniciar sesion", error);
-      const errorMessage = "Credenciales invalidas o servidor no disponible";
-      setError(errorMessage); // Mostrar error en la página
-      Swal.fire("Error", errorMessage, "error");
+
+      let errorMessage = "Error al iniciar sesion";
+      
+      if(error.response){
+        const status = error.response.status;
+        const detail = error.response.data?.detail;
+        const code = detail?.code;
+
+        if(status === 403 && code === "EMAIL_NOT_VERIFIED"){
+          errorMessage = detail?.message || "Debes verificar tu correo antes de iniciar sesión";
+          Swal.fire({
+            title:"Correo no verificado",
+            text: errorMessage,
+            icon: "warning",
+            confirmButtonText: "Reenviar correo",
+            showCancelButton: true
+          }).then(async (result) => {
+            if (result.isConfirmed){
+              await reenviarVerificacion(data.email);
+            }
+          });
+        } else if(status === 401) {
+          errorMessage = "Credenciales invalidas";
+        }else {
+          errorMessage = detail || "Error del servidor";
+        }
+      }else {
+        errorMessage = "Error del servidor";
+      }
+      setError(errorMessage)
+    } finally {
+      setLoading(false)
     }
   };
 
@@ -97,11 +131,16 @@ export default function Login() {
 
         <button
           type="submit"
-          disabled={isSubmitting}
+          disabled={loading}
           className="w-full rounded-xl bg-slate-900 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
         >
-          {isSubmitting ? "Ingresando..." : "Entrar"}
+          {loading ? "Ingresando..." : "Entrar"}
         </button>
+        {error && (
+          <p className="text-red-500 text-sm text-center mt-2">
+            {error}
+          </p>
+        )}
       </form>
 
       <p className="mt-4 text-center text-sm text-slate-600">
