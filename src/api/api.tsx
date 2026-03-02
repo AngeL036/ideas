@@ -48,6 +48,9 @@ api.interceptors.response.use(
         const originalRequest = error.config;
         if (!originalRequest) return Promise.reject(error);
 
+        if (originalRequest.url?.includes("/auth/login")){
+            return Promise.reject(error);
+        }
         // only handle 401 once per request
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
@@ -74,7 +77,7 @@ api.interceptors.response.use(
             localStorage.removeItem("refresh_token");
             localStorage.removeItem("user");
             // hard redirect to login page
-            window.location.href = "/login";
+            //window.location.href = "/restaurante/login";
             return Promise.reject(error);
         }
 

@@ -26,13 +26,13 @@ export function useRoleProtection(allowedRoles?: UserRole[]) {
     useEffect(() => {
         // Si no hay token, redirigir a login
         if (!token) {
-            navigate("/login", { replace: true });
+            navigate("login", { replace: true });
             return;
         }
 
         // Si no hay usuario o rol, redirigir a login
         if (!user || !user.role) {
-            navigate("/login", { replace: true });
+            navigate("login", { replace: true });
             return;
         }
 

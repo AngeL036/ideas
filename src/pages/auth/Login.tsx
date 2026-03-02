@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
@@ -10,10 +11,15 @@ const getAuthToken = (response: LoginUserResponse) =>
 
 export default function Login() {
   const navigate = useNavigate();
+  const [error, setError] = useState<string>("");
   const { register, handleSubmit, formState: { isSubmitting } } = useForm<LoginUserPayload>();
 
   const onSubmit = async (data: LoginUserPayload) => {
     try {
+      setError(""); // Limpiar error anterior
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      localStorage.removeItem("refresh_token");
       const response = await LoginUser(data);
       const token = getAuthToken(response);
 
@@ -57,7 +63,9 @@ export default function Login() {
       }
     } catch (error) {
       console.error("Error al iniciar sesion", error);
-      Swal.fire("Error", "Credenciales invalidas o servidor no disponible", "error");
+      const errorMessage = "Credenciales invalidas o servidor no disponible";
+      setError(errorMessage); // Mostrar error en la página
+      Swal.fire("Error", errorMessage, "error");
     }
   };
 
