@@ -36,7 +36,8 @@ export default function AppRoutes(){
             <Route path='/registro' element={<Register />} />
 
             <Route path='/verificacion-exitosa' element={<VerificacionExitosa/>} />
-            <Route path='verificacion-error' element={<VerificacionError/>}/>
+            <Route path='/verificacion-error' element={<VerificacionError/>}/>
+            
         </Route>
 
         <Route element={<PrivateLayout />}>

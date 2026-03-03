@@ -6,8 +6,8 @@ export default function VerificacionExitosa() {
   const navigate = useNavigate()
   useEffect(() => {
     setTimeout(() => {
-      navigate("login")
-    }, 300)
+      navigate("/login")
+    }, 3000)
   },[])
   return (
     <div className="text-center mt-20">
