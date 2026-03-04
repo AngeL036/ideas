@@ -8,7 +8,7 @@ function App() {
     <BrowserRouter basename='/restaurante/'>
     */}
   return (
-    <BrowserRouter basename='/restaurante/'>
+    <BrowserRouter>
       <AppRoutes />
     </BrowserRouter>
   )

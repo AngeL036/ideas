@@ -9,7 +9,7 @@ const access = [
   { label: "Gestionar menu", path: "/comida" },
   { label: "Ver pedidos", path: "/pedidos" },
   { label: "Control de mesas", path: "/mesas" },
-  { label: "Carrito", path: "/carrito" },
+ 
 ];
 
 export default function Dashboard() {

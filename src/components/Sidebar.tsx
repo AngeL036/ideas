@@ -1,74 +1,123 @@
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { FaHome, FaUtensils, FaClipboardList, FaChair, FaSignOutAlt, FaUser, FaStore } from "react-icons/fa";
+import { Dispatch, SetStateAction } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  LayoutDashboard,
+  Utensils,
+  ClipboardList,
+  Store,
+  Users,
+  BarChart3,
+  CreditCard,
+  Package,
+  User,
+  Menu,
+  X,
+} from "lucide-react";
 
+interface SidebarProps {
+  collapsed: boolean;
+  setCollapsed: Dispatch<SetStateAction<boolean>>;
+  mobileOpen: boolean;
+  setMobileOpen: Dispatch<SetStateAction<boolean>>;
+}
 
-export default function Sidebar() {
-  const location = useLocation();
-  const navigate = useNavigate();
-  let user: { email?: string } = {};
-  try {
-    user = JSON.parse(localStorage.getItem("user") || "{}");
-  } catch {
-    user = {};
-  }
-  const userLabel = user.email || "Usuario";
-
-  const menu = [
-    { name: "Dashboard", path: "/", icon: <FaHome /> },
-    { name: "Menu", path: "/comida", icon: <FaUtensils /> },
-    { name: "Ordenes", path: "/pedidos", icon: <FaClipboardList /> },
-    { name: "Mesas", path: "/mesas", icon: <FaChair /> },
-    { name: "Empleados", path: "/empleados", icon: <FaUser />},
-    { name: "Negocios", path: "/negocios", icon:<FaStore />},
-  ];
-  const cerrarSesion = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-    navigate("/login", { replace: true });
-  };
-
+export default function Sidebar({
+  collapsed,
+  setCollapsed,
+  mobileOpen,
+  setMobileOpen,
+}: SidebarProps) {
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 border-r border-slate-200/70 bg-white/90 text-slate-900 backdrop-blur">
-      <div className="flex h-full flex-col">
-        <div className="px-6 py-6">
-          <h1 className="text-xl font-black tracking-tight text-slate-900">RestaurantOS</h1>
-          <p className="mt-1 text-xs font-medium text-slate-500">Panel de control</p>
-        </div>
+    <>
+      {/* Overlay móvil */}
+      {mobileOpen && (
+        <div
+          onClick={() => setMobileOpen(false)}
+          className="fixed inset-0 z-40 bg-black/30 backdrop-blur-sm lg:hidden"
+        />
+      )}
 
-        <nav className="flex-1 space-y-2 px-3">
-          {menu.map((item) => {
-            const active = location.pathname === item.path;
+      <aside
+        className={`
+          fixed top-4 left-4 z-50 h-[calc(100vh-2rem)]
+          bg-white/80 backdrop-blur-xl
+          border border-slate-200
+          shadow-xl
+          rounded-3xl
+          transition-all duration-300
+          ${collapsed ? "w-20" : "w-64"}
+          ${mobileOpen ? "translate-x-0" : "-translate-x-full"}
+          lg:translate-x-0
+        `}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 h-16">
+          {!collapsed && (
+            <span className="text-lg font-bold bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
+              MiSistema
+            </span>
+          )}
 
-            return (
-              <Link
-                key={item.path}
-                to={item.path}
-                className={`flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all
-                ${
-                  active
-                    ? "bg-slate-900 text-white shadow-sm"
-                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                }`}
-              >
-                <span className="text-base">{item.icon}</span>
-                <span>{item.name}</span>
-              </Link>
-            );
-          })}
-        </nav>
-
-        <div className="m-3 rounded-xl border border-slate-200 bg-slate-50 p-4">
-          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">Usuario</p>
-          <p className="mt-1 truncate text-sm font-semibold text-slate-800">{userLabel}</p>
           <button
-            onClick={cerrarSesion}
-            className="mt-3 inline-flex w-full items-center justify-center gap-2 rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-700 transition hover:bg-rose-100 hover:text-rose-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-rose-300"
+            onClick={() => setCollapsed(!collapsed)}
+            className="hidden lg:flex p-2 rounded-xl hover:bg-slate-100 transition"
           >
-            <FaSignOutAlt className="text-sm" />
-            <span>Cerrar sesion</span>
+            <Menu size={18} />
+          </button>
+
+          <button
+            onClick={() => setMobileOpen(false)}
+            className="lg:hidden p-2 rounded-xl hover:bg-slate-100"
+          >
+            <X size={18} />
           </button>
         </div>
-      </div>
-    </aside>
+
+        {/* Navigation */}
+        <nav className="px-3 pb-6 space-y-1 text-sm">
+          <SidebarLink to="/" icon={<LayoutDashboard size={18} />} label="Dashboard" collapsed={collapsed} />
+          <SidebarLink to="/comida" icon={<Utensils size={18} />} label="Comida" collapsed={collapsed} />
+          <SidebarLink to="/pedidos" icon={<ClipboardList size={18} />} label="Pedidos" collapsed={collapsed} />
+          <SidebarLink to="/mesas" icon={<Store size={18} />} label="Mesas" collapsed={collapsed} />
+          <SidebarLink to="/empleados" icon={<Users size={18} />} label="Empleados" collapsed={collapsed} />
+          <SidebarLink to="/ventas" icon={<CreditCard size={18} />} label="Ventas" collapsed={collapsed} />
+          <SidebarLink to="/estadisticas" icon={<BarChart3 size={18} />} label="Estadísticas" collapsed={collapsed} />
+          <SidebarLink to="/inventario" icon={<Package size={18} />} label="Inventario" collapsed={collapsed} />
+          <SidebarLink to="/pagos" icon={<CreditCard size={18} />} label="Pagos" collapsed={collapsed} />
+          <SidebarLink to="/negocios" icon={<Store size={18} />} label="Negocios" collapsed={collapsed} />
+          <SidebarLink to="/perfil" icon={<User size={18} />} label="Perfil" collapsed={collapsed} />
+        </nav>
+      </aside>
+    </>
+  );
+}
+
+interface SidebarLinkProps {
+  to: string;
+  icon: React.ReactNode;
+  label: string;
+  collapsed: boolean;
+}
+
+function SidebarLink({ to, icon, label, collapsed }: SidebarLinkProps) {
+  return (
+    <NavLink
+      to={to}
+      end
+      className={({ isActive }) =>
+        `
+        flex items-center gap-3 px-3 py-2.5 rounded-2xl
+        transition-all duration-200
+        ${
+          isActive
+            ? "bg-emerald-100 text-emerald-700 shadow-sm"
+            : "text-slate-600 hover:bg-slate-100"
+        }
+      `
+      }
+    >
+      {icon}
+      {!collapsed && <span className="font-medium">{label}</span>}
+    </NavLink>
   );
 }

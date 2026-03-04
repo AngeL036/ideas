@@ -27,6 +27,7 @@ import { ProtectedRoute } from '../components/ProtectedRoute'
 import VerificacionExitosa from '../pages/auth/VerificacionExitosa'
 import VerificacionError from '../pages/auth/VerificacionError'
 import TestRoleProtection from '../pages/TestRoleProtection'
+import InventarioIndex from '../pages/inventario/InventarioIndex'
 
 export default function AppRoutes(){
     return(
@@ -82,7 +83,8 @@ export default function AppRoutes(){
                 <Route path='/negocios' element={<ProtectedRoute allowedRoles={['owner']}><NegocioIndex /></ProtectedRoute>} />
                 <Route path='/negocio/nuevo' element={<ProtectedRoute allowedRoles={['owner']}><AgregarNegocio/></ProtectedRoute>} />
                 <Route path='/negocio/:id/editar' element={<ProtectedRoute allowedRoles={['owner']}><EditarNegocio /></ProtectedRoute>} />
-
+                {/*Inventario - solo Admin y Owner */}
+                <Route path='/inventario' element={<ProtectedRoute allowedRoles={['admin', 'owner']} ><InventarioIndex /></ProtectedRoute>} />
                 {/* Pagos - Solo Admin y Owner */}
                 <Route path='/pagos' element={<ProtectedRoute allowedRoles={['admin', 'owner']}><IndexPagos /></ProtectedRoute>} />
             </Route>
