@@ -128,7 +128,7 @@ export default function DetallesMesa() {
           Cerrar cuenta
         </button>
           <Link
-            to={`/pedido/nuevo/${mesa?.numero}`}
+            to={`/pedido/nuevo/${mesa?.id}`}
             className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
           >
             Nuevo pedido

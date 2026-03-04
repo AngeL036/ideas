@@ -11,7 +11,7 @@ export default function Mesas({mesa}:Props){
     const isOcupada = mesa.estado === "ocupada";
     
     return(
-        <Link to={`/mesa/editar/${mesa.numero}`}>
+        <Link to={`/mesa/editar/${mesa.id}`}>
             <article
                 className={`rounded-2xl border p-5 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md
                 ${isOcupada

@@ -4,39 +4,22 @@ import Swal from "sweetalert2";
 
 interface Props {
   comida: PlatilloPayload;
-  onAdded?: () => void;
-  storageKey?: string;
+  onAgregar: (platillo_id: number, nombre: string, precio:number, cantidad:number) => void;
 }
 
-export default function PedidoCard({ comida, onAdded, storageKey = "carrito" }: Props) {
+export default function PedidoCard({ comida, onAgregar }: Props) {
   const [contador, setContador] = useState(1);
 
-  const agregarAlCarrito = () => {
-    const carrito = JSON.parse(localStorage.getItem(storageKey) || "[]");
-    const existe = carrito.find((item: any) => item.id === comida.id);
-
-    if (existe) {
-      existe.cantidad += contador;
-    } else {
-      carrito.push({
-        id: comida.id,
-        nombre: comida.nombre,
-        precio: comida.precio,
-        cantidad: contador,
-      });
-    }
-
-    localStorage.setItem(storageKey, JSON.stringify(carrito));
-    onAdded?.();
+  const handleAgregar = () => {
+    onAgregar(comida.id, comida.nombre, comida.precio, contador)
+    setContador(1);
     Swal.fire({
-      icon: "success",
-      title: "Agregado",
-      text: `${contador} ${comida.nombre}(s) anadidos al pedido`,
-      timer: 1500,
+      icon:"success",
+      title:"Agregando al carrito",
+      text: `${contador} ${comida.nombre}(s) listos para enviar`,
+      timer: 1200,
       showConfirmButton: false,
     });
-
-    setContador(1);
   };
 
   return (
@@ -71,7 +54,7 @@ export default function PedidoCard({ comida, onAdded, storageKey = "carrito" }: 
 
         <button
           disabled={contador === 0}
-          onClick={agregarAlCarrito}
+          onClick={handleAgregar}
           className="flex-1 rounded-xl bg-slate-900 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-300"
         >
           Agregar
