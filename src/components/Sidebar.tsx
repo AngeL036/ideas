@@ -1,5 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
   LayoutDashboard,
   Utensils,
@@ -12,6 +12,7 @@ import {
   User,
   Menu,
   X,
+  LogOut,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -27,6 +28,14 @@ export default function Sidebar({
   mobileOpen,
   setMobileOpen,
 }: SidebarProps) {
+  const navigate = useNavigate();
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("refresh_token");
+    navigate("/login", { replace: true });
+  }
+
   return (
     <>
       {/* Overlay móvil */}
@@ -87,6 +96,15 @@ export default function Sidebar({
           <SidebarLink to="/negocios" icon={<Store size={18} />} label="Negocios" collapsed={collapsed} />
           <SidebarLink to="/perfil" icon={<User size={18} />} label="Perfil" collapsed={collapsed} />
         </nav>
+        <div className="absolute bottom-4 left-0 right-0 px-3">
+          <button
+            onClick={handleLogout}
+            className="flex items-center gap-3 w-full px-3 py-2.5 rounded-2xl text-red-500 hover:bg-red-50 transition-all duration-200"
+            >
+              <LogOut size={18}/>
+              {!collapsed && <span className="font-medium">Cerrar sesion</span>}
+          </button>
+        </div>
       </aside>
     </>
   );
