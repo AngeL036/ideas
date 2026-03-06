@@ -1,19 +1,9 @@
 import { Dispatch, SetStateAction } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
-import {
-  LayoutDashboard,
-  Utensils,
-  ClipboardList,
-  Store,
-  Users,
-  BarChart3,
-  CreditCard,
-  Package,
-  User,
-  Menu,
-  X,
-  LogOut,
-} from "lucide-react";
+import { NavLink, useNavigate} from "react-router-dom";
+import { Menu,X,LogOut } from "lucide-react";
+import * as Icons from "lucide-react"
+import { useGiro } from "../config/giros/GiroContext";
+
 
 interface SidebarProps {
   collapsed: boolean;
@@ -29,6 +19,7 @@ export default function Sidebar({
   setMobileOpen,
 }: SidebarProps) {
   const navigate = useNavigate();
+  const {nav,nombre, tema} = useGiro();
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -59,11 +50,16 @@ export default function Sidebar({
           lg:translate-x-0
         `}
       >
-        {/* Header */}
+        {/* Header: nombre del negocio + botones colapsar/cerrar */}
         <div className="flex items-center justify-between px-4 h-16">
           {!collapsed && (
-            <span className="text-lg font-bold bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent">
-              MiSistema
+            <span 
+              className="text-lg font-bold bg-gradient-to-r from-emerald-500 to-teal-500 bg-clip-text text-transparent"
+              style={{
+                backgroundImage: `linear-gradient(to rigth, ${tema.primary}, ${tema.secondary})`  
+              }}
+              >
+              {nombre}
             </span>
           )}
 
@@ -82,20 +78,41 @@ export default function Sidebar({
           </button>
         </div>
 
-        {/* Navigation */}
+        {/* Nav generado dinámicamente desde el config del giro */}
         <nav className="px-3 pb-6 space-y-1 text-sm">
-          <SidebarLink to="/" icon={<LayoutDashboard size={18} />} label="Dashboard" collapsed={collapsed} />
-          <SidebarLink to="/comida" icon={<Utensils size={18} />} label="Comida" collapsed={collapsed} />
-          <SidebarLink to="/pedidos" icon={<ClipboardList size={18} />} label="Pedidos" collapsed={collapsed} />
-          <SidebarLink to="/mesas" icon={<Store size={18} />} label="Mesas" collapsed={collapsed} />
-          <SidebarLink to="/empleados" icon={<Users size={18} />} label="Empleados" collapsed={collapsed} />
-          <SidebarLink to="/ventas" icon={<CreditCard size={18} />} label="Ventas" collapsed={collapsed} />
-          <SidebarLink to="/estadisticas" icon={<BarChart3 size={18} />} label="Estadísticas" collapsed={collapsed} />
-          <SidebarLink to="/inventario" icon={<Package size={18} />} label="Inventario" collapsed={collapsed} />
-          <SidebarLink to="/pagos" icon={<CreditCard size={18} />} label="Pagos" collapsed={collapsed} />
-          <SidebarLink to="/negocios" icon={<Store size={18} />} label="Negocios" collapsed={collapsed} />
-          <SidebarLink to="/perfil" icon={<User size={18} />} label="Perfil" collapsed={collapsed} />
+          {nav.map((item) => {
+            const IconComponent = (
+              Icons as unknown as Record<string, React.ComponentType<{ size?: number}>>
+            )[item.icon];
+            return(
+              <NavLink
+                key={item.ruta}
+                to={item.ruta}
+                end
+                className={({ isActive}) =>`
+                flex items-center gap-3 px-3 py-2.5 rounded-2xl
+                transition-all duration-200
+                  ${
+                    isActive
+                    ? "bg-emerald-100 text-emerald-700 shadow-sm"
+                    :"text-slate-600 hover:bg-slate-100"
+                  }
+                `}
+                >
+                  {IconComponent && <IconComponent size={18}/>}
+                  {!collapsed && <span className="font-medium">{item.label}</span>} 
+                  {!collapsed && item.badge && (
+                    <span 
+                      className="ml-auto text-xs bg-red-100 text-red-600 px-2 py-2.5 rounded-full"
+                      >
+                      {item.badge}
+                    </span>
+                  )}
+              </NavLink>
+            );
+          })}
         </nav>
+        {/* Botón de logout fijo abajo */}
         <div className="absolute bottom-4 left-0 right-0 px-3">
           <button
             onClick={handleLogout}
