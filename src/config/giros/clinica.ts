@@ -10,7 +10,7 @@ const clinica: GiroConfig = {
   },
   modulos: ['dashboard', 'citas', 'expedientes', 'pacientes', 'pagos', 'reportes'],
   nav: [
-    { label: 'Dashboard',   ruta: '/dashboard',   icon: 'LayoutDashboard' },
+    { label: 'Dashboard',   ruta: '/',   icon: 'LayoutDashboard' },
     { label: 'Citas',       ruta: '/citas',        icon: 'CalendarCheck'   },
     { label: 'Expedientes', ruta: '/expedientes',  icon: 'FolderHeart'     },
     { label: 'Pacientes',   ruta: '/pacientes',    icon: 'UserRound'       },

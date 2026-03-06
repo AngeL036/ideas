@@ -10,7 +10,7 @@ const restaurante: GiroConfig = {
     },
      modulos: ['dashboard', 'mesas', 'pedidos', 'cocina', 'menu', 'reportes'],
   nav: [
-    { label: 'Dashboard', ruta: '/dashboard', icon: 'LayoutDashboard' },
+    { label: 'Dashboard', ruta: '/', icon: 'LayoutDashboard' },
     { label: 'Mesas',     ruta: '/mesas',     icon: 'UtensilsCrossed' },
     { label: 'Pedidos',   ruta: '/pedidos',   icon: 'ClipboardList'   },
     { label: 'Cocina',    ruta: '/cocina',    icon: 'ChefHat'         },

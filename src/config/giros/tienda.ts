@@ -10,7 +10,7 @@ const tienda: GiroConfig = {
   },
   modulos: ['dashboard', 'pos', 'inventario', 'clientes', 'compras', 'reportes'],
   nav: [
-    { label: 'Dashboard',   ruta: '/dashboard',  icon: 'LayoutDashboard' },
+    { label: 'Dashboard',   ruta: '/',  icon: 'LayoutDashboard' },
     { label: 'Punto Venta', ruta: '/pos',         icon: 'ShoppingCart'    },
     { label: 'Inventario',  ruta: '/inventario',  icon: 'Package'         },
     { label: 'Clientes',    ruta: '/clientes',    icon: 'Users'           },
