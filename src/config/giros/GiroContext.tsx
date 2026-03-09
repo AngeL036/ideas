@@ -28,8 +28,15 @@ export function GiroProvider({config, children}: GiroProviderProps){
 export function useGiro(): GiroConfig{
     const ctx = useContext(GiroContext)
     if(!ctx){
-        throw new Error('useGiro debe usarse dentro de <GiroProvider>')
+        return {
+            giro: 'restaurante',
+            nombre: '',
+            tema: { primary: '#000', secondary: '#000', accent: '#000' },
+            modulos: [],
+            nav: [],
+        }
     }
+
     return ctx
 }
 

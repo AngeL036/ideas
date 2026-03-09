@@ -8,8 +8,11 @@ import { getGiroConfig } from './config'
 function App() {
   const {negocio, loading} = useAuth()
 
-  if (loading) return <div>Cargando...</div>
-  if (!negocio) return <Navigate to="/login" />
+  if (loading) return null
+
+  if (!negocio) {
+    return <AppRoutes />
+  }
   const giroConfig = getGiroConfig(negocio?.giro ?? 'restaurante')
  {/* descomenta esto solo para producción, si vas a desplegar la app bajo /restaurante, establece el basename en BrowserRouter
     <BrowserRouter basename='/restaurante/'>

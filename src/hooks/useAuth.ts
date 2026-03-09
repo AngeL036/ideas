@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/api"
 
 export function useAuth() {
     const [loading, setLoading] = useState(true) 
@@ -16,16 +16,21 @@ export function useAuth() {
             navigate("/login", { replace: true });
             return;
         }
-        axios.get("http://localhost:8000/auth/me", {
-            headers: {Authorization: `Bearer ${token}`}
-        })
+        api.get("auth/me")
         .then((res) => {
+            console.log('Respuesta /auth/me:', res.data)
             setNegocio({giro: res.data.giro ?? 'restaurante'})
         })
-        .catch(() => {
-            localStorage.removeItem("token")
-            localStorage.removeItem("user")
-            navigate("/login", { replace: true })
+        .catch((err) => {
+            if (err.response?.status === 401){
+                localStorage.removeItem("token")
+                localStorage.removeItem("user")
+                navigate("/login", { replace: true })
+            }else {
+                console.warn("Error en /auth/me, usando fallback:", err)
+                setNegocio({ giro: 'restaurante' })
+            }
+            
         })
         .finally(() => setLoading(false))
     }, [token])

@@ -8,14 +8,21 @@ export default function IndexPedidos() {
   const [pedidos, setPedidos] = useState<PedidoItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [refresh, setRefresh] = useState(0);
+  const [fecha, setFecha] = useState(() => {
+    const hoy = new Date()
+    const year = hoy.getFullYear()
+    const month = String(hoy.getMonth() + 1).padStart(2, '0')
+    const day = String(hoy.getDate()).padStart(2, '0')
+    return `${year}-${month}-${day}`
+  });
 
   useEffect(() => {
     CargarPedidos();
-  }, [refresh]);
+  }, [refresh, fecha]);
 
   const CargarPedidos = async () => {
     try {
-      const data = await ObtenerPedidos();
+      const data = await ObtenerPedidos(fecha);
       setPedidos(data);
     } catch (error) {
       console.error("error al cargar los pedidos", error);
@@ -44,15 +51,26 @@ export default function IndexPedidos() {
             <h1 className="text-3xl font-black tracking-tight text-slate-900">Panel de Pedidos</h1>
             <p className="mt-1 text-sm text-slate-600">Seguimiento en tiempo real de ordenes del restaurante.</p>
           </div>
+          {/* 
           <Link
             to="/pedido/nuevo"
             className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
           >
             Nuevo pedido
           </Link>
+          */}
         </div>
       </header>
-
+      <div>
+        <label className="text-sm font-medium text-slate-700">
+            Filtrar por fecha
+            <input 
+              type="date"
+              value={fecha}
+              onChange={(e) => setFecha(e.target.value)}
+              className="ml-3 rounded-xl border border-slate-200 px-3 py-1.5 text-sm outline-none focus:border-slate-400"
+               />
+          </label>
       {pedidos.length === 0 ? (
         <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
           <p className="text-lg text-slate-500">No hay pedidos registrados.</p>
@@ -67,7 +85,9 @@ export default function IndexPedidos() {
             />
           ))}
         </div>
+        
       )}
+      </div>
     </div>
   );
 }

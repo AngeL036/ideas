@@ -15,8 +15,9 @@ export const agregarPlato = async (data:PedidoMesa):Promise<PedidoResponse> => {
     return response.data
 }
 
-export const ObtenerPedidos = async(): Promise<PedidoItem[]> => {
-    const response = await api.get("/pedidos/");
+export const ObtenerPedidos = async(fecha?:string): Promise<PedidoItem[]> => {
+    const params = fecha ? {fecha} : {}
+    const response = await api.get("/pedidos/", {params});
     return response.data
 }
 

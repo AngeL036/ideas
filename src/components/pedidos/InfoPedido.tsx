@@ -1,8 +1,9 @@
 import { useNavigate } from "react-router-dom";
 import type { PedidoItem } from "../../types/Pedido";
 import { ActualizarEstadoPedido } from "../../api/pedido.api";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { obtenerEmpleado } from "../../api/empleado.api";
+import type { EmpleadoConUsuario } from "../../types/Empleado";
 interface Props {
   pedido: PedidoItem;
   onStatusChange?: () => void;
@@ -22,9 +23,21 @@ export default function InfoPedido({ pedido, onStatusChange }: Props) {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
+  const [mesero, setMesero] = useState<EmpleadoConUsuario>();
   const estadoActual = ESTADOS.find(e => e.valor === pedido.estado);
   const estadosDisponibles = ESTADOS.filter(e => e.valor !== pedido.estado);
+  useEffect(() => {
+    const fetchMesero = async () => {
+      try{
+        const data = await obtenerEmpleado(pedido.mesero_id);
+        
+        setMesero(data)
+      }catch(error){
+        console.error(error)
+      }
+      }
+      fetchMesero()
+  },[pedido.mesero_id])
 
   const handleCambiarEstado = async (nuevoEstado: string) => {
     setLoading(true);
@@ -52,7 +65,7 @@ export default function InfoPedido({ pedido, onStatusChange }: Props) {
 
       <div className="mt-4 space-y-1 text-sm text-slate-600">
         <p className="font-semibold text-emerald-600">Total: ${pedido.total}</p>
-        <p>Mesero ID: {pedido.mesero_id || "N/A"}</p>
+        <p>Mesero ID: {mesero?.nombre || "N/A"}</p>
       </div>
 
       <p className="mt-3 text-xs text-slate-500">
@@ -75,36 +88,9 @@ export default function InfoPedido({ pedido, onStatusChange }: Props) {
         >
           Ver Detalles
         </button>
-
-        <div className="relative group">
-          <button
-            disabled={loading}
-            className="w-full rounded-lg bg-slate-900 px-3 py-2 text-sm font-medium text-white hover:bg-slate-800 transition disabled:opacity-50 disabled:cursor-not-allowed"
-          >
-            {loading ? "Actualizando..." : "Cambiar Estado"}
-          </button>
-
-          {/* Dropdown desplegable */}
-          {estadosDisponibles.length > 0 && (
-            <div className="absolute right-0 mt-2 w-48 rounded-lg border border-slate-200 bg-white shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
-              {estadosDisponibles.map(estado => (
-                <button
-                  key={estado.valor}
-                  onClick={() => handleCambiarEstado(estado.valor)}
-                  disabled={loading}
-                  className={`w-full px-4 py-2 text-left text-sm hover:bg-slate-50 first:rounded-t-lg last:rounded-b-lg border-b border-slate-100 last:border-b-0 ${
-                    loading ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
-                >
-                  <span className={`inline-block px-2 py-1 rounded text-xs font-semibold ${estado.color}`}>
-                    {estado.label}
-                  </span>
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        
       </div>
     </article>
   );
 }
+

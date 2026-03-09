@@ -28,8 +28,10 @@ import VerificacionExitosa from '../pages/auth/VerificacionExitosa'
 import VerificacionError from '../pages/auth/VerificacionError'
 import TestRoleProtection from '../pages/TestRoleProtection'
 import InventarioIndex from '../pages/inventario/InventarioIndex'
+import { GiroConfig } from '../config'
+import ReportesIndex from '../pages/reportes/ReportesIndex'
 
-export default function AppRoutes(){
+export default function AppRoutes({config}: {config?: GiroConfig}){
     return(
     <Routes>
         <Route element={<PublicLayout />}>
@@ -85,6 +87,8 @@ export default function AppRoutes(){
                 <Route path='/negocio/:id/editar' element={<ProtectedRoute allowedRoles={['owner']}><EditarNegocio /></ProtectedRoute>} />
                 {/*Inventario - solo Admin y Owner */}
                 <Route path='/inventario' element={<ProtectedRoute allowedRoles={['admin', 'owner']} ><InventarioIndex /></ProtectedRoute>} />
+                {/*Reprtes - solo Admin y Owner */}
+                <Route path='/reportes' element={<ProtectedRoute allowedRoles={['admin', 'owner']} ><ReportesIndex /></ProtectedRoute>}/>
                 {/* Pagos - Solo Admin y Owner */}
                 <Route path='/pagos' element={<ProtectedRoute allowedRoles={['admin', 'owner']}><IndexPagos /></ProtectedRoute>} />
             </Route>
