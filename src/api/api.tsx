@@ -7,6 +7,7 @@ const api = axios.create({
     headers:{
          "Content-Type": "application/json",
     },
+    timeout: 8000,
 });
 
 // attach access token to requests
@@ -30,7 +31,11 @@ api.interceptors.response.use(
         if (originalRequest.url?.includes("/auth/login")){
             return Promise.reject(error);
         }
-        
+        if (!error.response) {
+            // Sin respuesta del servidor (timeout, red caída, CORS)
+            console.error("Sin respuesta del servidor:", error.code);
+            return Promise.reject(error);
+        }
         if (error.response && error.response.status === 401 && !originalRequest._retry) {
             localStorage.removeItem("token");
             localStorage.removeItem("refresh_token");
