@@ -14,7 +14,7 @@ export function useAuth() {
     useEffect(() => {
         if (!token) {
             setLoading(false);
-            navigate("login", { replace: true});
+            navigate("/login", { replace: true});
             return;
         }
         let cancelled = false;
@@ -26,7 +26,7 @@ export function useAuth() {
             if(err.response?.status === 401){
                  localStorage.removeItem("token")
                 setToken(null) // ← limpiar estado también
-                navigate("/login", { replace: true })
+                window.location.href = "/login";
             }else {
                 setNegocio({ giro: 'restaurante' })
             }
