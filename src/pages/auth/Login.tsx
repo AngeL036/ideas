@@ -5,12 +5,14 @@ import Swal from "sweetalert2";
 import { LoginUser, reenviarVerificacion } from "../../api/User.api";
 import { obtenerMisNegocios } from "../../api/negocio.api";
 import type { LoginUserPayload, LoginUserResponse } from "../../types/User";
+import { useAuth } from "../../hooks/useAuth";
 
 const getAuthToken = (response: LoginUserResponse) =>
   response.token ?? response.access_token ?? response.access ?? response.jwt;
 
 export default function Login() {
   const navigate = useNavigate();
+  const {setToken} = useAuth();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, formState: { isSubmitting } } = useForm<LoginUserPayload>();
@@ -33,6 +35,7 @@ export default function Login() {
       }
 
       localStorage.setItem("token", token);
+      setToken(token)
 
       const storedUser = response.user ?? { email: response.email ?? data.email, role: "employee" };
       localStorage.setItem("user", JSON.stringify(storedUser));

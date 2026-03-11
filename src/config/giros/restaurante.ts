@@ -14,7 +14,7 @@ const restaurante: GiroConfig = {
     { label: 'Mesas',     ruta: '/mesas',     icon: 'UtensilsCrossed' },
     { label: 'Pedidos',   ruta: '/pedidos',   icon: 'ClipboardList'   },
     { label: 'Menú',      ruta: '/comida',      icon: 'BookOpen'      },
-    { label: 'Reportes',  ruta: '/reportes',  icon: 'BarChart2'       },
+   
   ],
   dashboardWidgets: ['mesas-activas', 'pedidos-en-curso', 'ventas-hoy', 'tiempo-promedio'],
 }
