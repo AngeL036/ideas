@@ -5,7 +5,7 @@ import Swal from "sweetalert2";
 import { LoginUser, reenviarVerificacion } from "../../api/User.api";
 import { obtenerMisNegocios } from "../../api/negocio.api";
 import type { LoginUserPayload, LoginUserResponse } from "../../types/User";
-import { useAuth } from "../../hooks/useAuth";
+import { useAuth } from "../../hooks/AuthContext";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 
 const getAuthToken = (response: LoginUserResponse) =>
@@ -13,7 +13,7 @@ const getAuthToken = (response: LoginUserResponse) =>
 
 export default function Login() {
   const navigate = useNavigate();
-  const {setToken} = useAuth();
+  const {login} = useAuth();
   const [error, setError] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
@@ -35,12 +35,9 @@ export default function Login() {
       if (!token) {
         throw new Error("No se recibio token");
       }
-
-      localStorage.setItem("token", token);
-      setToken(token)
-
       const storedUser = response.user ?? { email: response.email ?? data.email, role: "employee" };
-      localStorage.setItem("user", JSON.stringify(storedUser));
+      
+      login(token,storedUser)
 
       await Swal.fire({
         title: "Bienvenido",

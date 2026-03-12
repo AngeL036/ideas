@@ -1,7 +1,8 @@
 import { BrowserRouter, Navigate, Route, Routes} from 'react-router-dom'
 import './App.css'
 import AppRoutes from './routes/AppRoutes'
-import {useAuth} from "./hooks/useAuth"
+
+import { useAuth } from "./hooks/AuthContext"
 import { GiroProvider } from './config/giros/GiroContext' 
 import { getGiroConfig } from './config'
 
