@@ -10,10 +10,11 @@ const restaurante: GiroConfig = {
     },
      modulos: ['dashboard', 'mesas', 'pedidos', 'cocina', 'menu', 'reportes'],
   nav: [
-    { label: 'Dashboard', ruta: '/', icon: 'LayoutDashboard' },
-    { label: 'Mesas',     ruta: '/mesas',     icon: 'UtensilsCrossed' },
-    { label: 'Pedidos',   ruta: '/pedidos',   icon: 'ClipboardList'   },
-    { label: 'Menú',      ruta: '/comida',      icon: 'BookOpen'      },
+    { label: 'Dashboard', ruta: '/',          icon: 'LayoutDashboard', roles:['owner', 'admin']},
+    { label: 'Mesas',     ruta: '/mesas',     icon: 'UtensilsCrossed', roles:['owner', 'admin', 'mesero'] },
+    { label: 'Pedidos',   ruta: '/pedidos',   icon: 'ClipboardList',   roles:['owner', 'admin',] },
+    { label: 'Menú',      ruta: '/comida',    icon: 'BookOpen',        roles:['owner', 'admin', 'mesero']      },
+    { label: 'Empleados', ruta: '/empleados', icon: 'UserCog',         roles:['owner', 'admin']},
    
   ],
   dashboardWidgets: ['mesas-activas', 'pedidos-en-curso', 'ventas-hoy', 'tiempo-promedio'],

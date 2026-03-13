@@ -3,6 +3,7 @@ import { NavLink, useNavigate} from "react-router-dom";
 import { Menu,X,LogOut } from "lucide-react";
 import * as Icons from "lucide-react"
 import { useGiro } from "../config/giros/GiroContext";
+import { useAuth } from "../hooks/AuthContext";
 
 
 interface SidebarProps {
@@ -20,6 +21,13 @@ export default function Sidebar({
 }: SidebarProps) {
   const navigate = useNavigate();
   const {nav,nombre, tema} = useGiro();
+  const { user } = useAuth();
+
+  const userRole = (user as any)?.role?.toLowerCase?.() ?? "";
+  const navFiltrado = nav.filter((item) => 
+  !item.roles || item.roles.length === 0 || item.roles.includes(userRole)
+  )
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user");
@@ -80,7 +88,7 @@ export default function Sidebar({
 
         {/* Nav generado dinámicamente desde el config del giro */}
         <nav className="px-3 pb-6 space-y-1 text-sm">
-          {nav.map((item) => {
+          {navFiltrado.map((item) => {
             const IconComponent = (
               Icons as unknown as Record<string, React.ComponentType<{ size?: number}>>
             )[item.icon];

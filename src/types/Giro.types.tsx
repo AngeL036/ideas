@@ -4,7 +4,8 @@ export interface NavItem {
     label: string
     ruta: string
     icon: string
-    badge?: string
+    badge?: string | number
+    roles?: string[]
 }
 
 export interface Tema {
