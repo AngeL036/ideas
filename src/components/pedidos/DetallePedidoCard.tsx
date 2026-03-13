@@ -1,10 +1,26 @@
+import { useEffect, useState } from "react";
 import type { Detalle } from "../../types/Pedido";
+import { obtenerPlato } from "../../api/platillo.api";
+import { PlatilloPayload } from "../../types/Platillo";
 
 interface Props {
   detalle: Detalle;
 }
 
 export default function DetallePedidoCard({ detalle }: Props) {
+  const [platillo, setPlatillo] = useState<PlatilloPayload>();
+
+  useEffect(() => {
+    const fechPlatillo = async () => {
+      try{
+            const data = await obtenerPlato(detalle.platillo_id)
+            setPlatillo(data)
+      }catch (error){
+        console.error("error: ", error)
+      }
+    }
+    fechPlatillo()
+  },[])
   return (
     <article className="space-y-4 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:shadow-md">
       <div className="flex items-center justify-between border-b border-slate-200 pb-3">
@@ -12,7 +28,7 @@ export default function DetallePedidoCard({ detalle }: Props) {
           <p className="text-xs text-slate-500">Pedido</p>
           <span className="font-semibold text-slate-800">#{detalle.pedido_id}</span>
         </div>
-        <span className="rounded-full bg-sky-100 px-3 py-1 text-sm font-semibold text-sky-700">Platillo #{detalle.platillo_id}</span>
+        <span className="rounded-full bg-sky-100 px-3 py-1 text-sm font-semibold text-sky-700">{platillo?.nombre}</span>
       </div>
 
       <div className="grid grid-cols-2 gap-4 text-sm text-slate-700">

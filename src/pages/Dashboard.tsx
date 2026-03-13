@@ -17,6 +17,16 @@ const ESTADO_PILL: Record<string, string> = {
   Cancelado: "bg-red-100 text-red-600",
   Pendiente: "bg-amber-100 text-amber-700",
 }
+
+const fmtFecha = (raw: string) => {
+  const d = new Date(raw);
+  if (isNaN(d.getTime())) return raw;
+  const fecha = d.toLocaleDateString("es-MX", { day: "2-digit", month: "short", year:"numeric"});
+  const hora = d.toLocaleTimeString("es-MX", {hour: "2-digit", minute:"2-digit", hour12:true});
+  return {fecha, hora}
+    
+}
+
 export default function Dashboard() {
   const [datos, setDatos] = useState<MesasOcupadasResponse>();
   const [transactions, setTransactions] = useState<TransactionData[]>([]);
@@ -92,26 +102,38 @@ export default function Dashboard() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-400">
-                {["ID","Fecha","Cliente","Método","Monto","Estado"].map(h => (
+                {["#", "Fecha","Cliente","Metodo", "Monto", "Estado"].map(h => (
                   <th key={h} className="px-6 py-3">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
-              {transactions.map((t, i) => (
-                <tr key={t.id} className={`border-b border-slate-50 transition hover:bg-slate-50/60 ${i % 2 === 0 ? "" : "bg-slate-50/30"}`}>
-                  <td className="px-6 py-3 font-mono text-xs font-semibold text-slate-500">{t.id}</td>
-                  <td className="px-6 py-3 text-slate-600">{t.fecha}</td>
-                  <td className="px-6 py-3 font-medium text-slate-800">{t.cliente}</td>
-                  <td className="px-6 py-3 text-slate-500">{t.metodo}</td>
-                  <td className="px-6 py-3 font-bold text-slate-900">{fmt(t.monto)}</td>
-                  <td className="px-6 py-3">
-                    <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${ESTADO_PILL[t.estado]}`}>
-                      {t.estado}
-                    </span>
-                  </td>
-                </tr>
-              ))}
+              {transactions.map((t, i) => {
+                const fechaFtm = fmtFecha(t.fecha);
+                return (
+                  <tr key={t.id} className={`border-b border-slate-50 transition hover:bg-slate-50/60 ${i % 2 === 0 ? "" : "bg-slate-50/30"}`}>
+                    <td className="px-6 py-3 font-mono text-xs font-semibold text-slate-400">{i + 1}</td>
+                    <td className="px-6 py-3  leading-tight">
+                      {typeof fechaFtm === "object" ? (
+                        <>
+                        <span className="block font-medium text-slate-700">{fechaFtm.fecha}</span>
+                        <span className="block text-sm text-slate-400">{fechaFtm.hora}</span>
+                        </>
+                      ): (
+                        <span className="text-slate-600">{fechaFtm}</span>
+                      )}
+                    </td>
+                    <td className="px-6 py-3 font-medium text-slate-800">{t.cliente}</td>
+                    <td className="px-6 py-3 text-slate-500">{t.metodo}</td>
+                    <td className="px-6 py-3 font-bold text-slate-900">{fmt(t.monto)}</td>
+                    <td className="px-6 py-3">
+                      <span className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${ESTADO_PILL[t.estado]}`}>
+                        {t.estado}
+                      </span>
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>

@@ -65,7 +65,7 @@ export default function InfoPedido({ pedido, onStatusChange }: Props) {
 
       <div className="mt-4 space-y-1 text-sm text-slate-600">
         <p className="font-semibold text-emerald-600">Total: ${pedido.total}</p>
-        <p>Mesero ID: {mesero?.nombre || "N/A"}</p>
+        <p>Mesero: {mesero?.nombre || "N/A"}</p>
       </div>
 
       <p className="mt-3 text-xs text-slate-500">
