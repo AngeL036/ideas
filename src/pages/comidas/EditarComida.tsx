@@ -1,24 +1,43 @@
 import FormComida from "../../components/comidas/FormComida"
 import { useState,useEffect } from "react"
-import type { RegistrarPayload } from "../../types/Platillo"
-import { useParams } from "react-router-dom";
+import type { RegistrarPayload, PlatilloPayload } from "../../types/Platillo"
+import { useNavigate, useParams } from "react-router-dom";
+import { obtenerPlato, updatePlato } from "../../api/platillo.api";
+import Swal from "sweetalert2";
 
 export default function EditarComida(){
     const {id} = useParams();
-    const [plato,setPlato]  = useState<RegistrarPayload>();
+    const navigate = useNavigate()
+    const [plato,setPlato]  = useState<PlatilloPayload>();
 
 
     useEffect(() => {
-        setPlato({
-            nombre:"chilaquieres",
-            precio:99,
-            descripcion:"chilaquiles rojos",
-        });
-    }, [])
+        const fetchPlato = async () => {
+            const data = await obtenerPlato(Number(id));
+            setPlato(data)
+        };
+        fetchPlato();
+    }, [id])
 
     const onSubmit = async (data:RegistrarPayload) => {
-         console.log("Editando ID:", id);
-        console.log("Datos:", data);
+        try{
+            await updatePlato(data,Number(id));
+            await Swal.fire({
+                title: "Actualizado",
+                text: "El platillo se actualizó correctamente",
+                icon: "success",
+                timer: 1200,
+                showConfirmButton: false,
+            });
+            navigate(-1);
+        }catch (error){
+            Swal.fire({
+                title: "Error",
+                text: "No se pudo actualizar el platillo",
+                icon: "error",
+            });
+        }
+        
     };
 
     if(!plato) return null;

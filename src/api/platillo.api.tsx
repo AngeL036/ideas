@@ -1,6 +1,5 @@
 import api from "./api";
 import type { ResponsePayload,RegistrarPayload,UpdatePayload, PlatilloPayload } from "../types/Platillo";
-import axios from "axios";
 
 
 export const registrarPlato = async(payload:RegistrarPayload): Promise<ResponsePayload> => {
@@ -18,7 +17,7 @@ export const obtenerPlatosActivos = async(): Promise<PlatilloPayload[]> => {
     return response.data
 }
 
-export const obtenerPlato = async(id:number):Promise<ResponsePayload> => {
+export const obtenerPlato = async(id:number):Promise<PlatilloPayload> => {
     const response = await api.get(`/platos/${id}`)
     return response.data
 }

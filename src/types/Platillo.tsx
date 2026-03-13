@@ -2,6 +2,7 @@ export interface RegistrarPayload {
     nombre:string,
     precio:number,
     descripcion:string,
+    categoria_id: number;
     
 }
 
@@ -14,6 +15,7 @@ export interface UpdatePayload {
     nombre:string,
     precio:number,
     descripcion:string,
+     categoria_id: number;
     
 }
 
@@ -22,5 +24,14 @@ export interface PlatilloPayload {
     nombre:string,
     precio:number,
     descripcion:string,
-    activo:boolean
+    activo:boolean;
+     categoria_id: number;
+}
+ 
+
+ 
+// NUEVO: tipo para categorías
+export interface CategoriaPayload {
+    id: number;
+    nombre: string;
 }
