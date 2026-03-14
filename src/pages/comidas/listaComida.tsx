@@ -4,11 +4,17 @@ import { obtenerPlatos, eliminarPlato, actualizarActivo } from "../../api/platil
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
+import { useRoleProtection } from "../../hooks/useRoleProtection";
 
 export default function ListaComida() {
   const [platillos, setPlatillos] = useState<PlatilloPayload[]>([]);
   const [loading, setLoading] = useState(true);
   const [loadingToggle, setLoadingToggle] = useState<number | null>(null);
+
+  // ── CAMBIO: detectar rol para ocultar acciones de admin/owner ─────────
+  const { hasRole } = useRoleProtection();
+  const puedeAgregar = hasRole(["owner", "admin"]);
+  // ──────────────────────────────────────────────────────────────────────
 
   useEffect(() => {
     cargarPlatillos();
@@ -28,7 +34,6 @@ export default function ListaComida() {
   const handleToggleaActivo = async (id: number, activo: boolean) => {
     setPlatillos((prev) => prev.map((plato) => (plato.id === id ? { ...plato, activo } : plato)));
     setLoadingToggle(id);
-
     try {
       await actualizarActivo(id, activo);
     } catch (error) {
@@ -49,9 +54,7 @@ export default function ListaComida() {
       confirmButtonText: "Si, eliminar",
       cancelButtonText: "Cancelar",
     });
-
     if (!result.isConfirmed) return;
-
     try {
       await eliminarPlato(id);
       setPlatillos((prev) => prev.filter((plato) => plato.id !== id));
@@ -77,12 +80,17 @@ export default function ListaComida() {
             <h1 className="text-3xl font-black tracking-tight text-slate-900">Menu</h1>
             <p className="mt-1 text-sm text-slate-600">Administra disponibilidad, precio y descripcion de platillos.</p>
           </div>
-          <Link
-            to="/comida/nueva"
-            className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
-          >
-            Agregar comida
-          </Link>
+
+          {/* ── CAMBIO: solo owner/admin ven el botón Agregar ── */}
+          {puedeAgregar && (
+            <Link
+              to="/comida/nueva"
+              className="inline-flex items-center justify-center rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
+            >
+              Agregar comida
+            </Link>
+          )}
+          {/* ─────────────────────────────────────────────────── */}
         </div>
       </header>
 

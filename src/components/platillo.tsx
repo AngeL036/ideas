@@ -1,3 +1,4 @@
+import { useRoleProtection } from "../hooks/useRoleProtection";
 import type { PlatilloPayload } from "../types/Platillo";
 import { Link } from "react-router-dom";
 
@@ -9,6 +10,9 @@ interface Props {
 }
 
 export default function Platillo({ plato, onDelete, onToggleActivo, loading }: Props) {
+  const {hasRole} = useRoleProtection();
+  const puedeEditar = hasRole(["owner", "admin"])
+
   return (
     <article className="flex h-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
       <div>
@@ -19,8 +23,8 @@ export default function Platillo({ plato, onDelete, onToggleActivo, loading }: P
       <div className="mt-4 flex items-center justify-between">
         <span className="text-2xl font-black text-emerald-600">${plato.precio}</span>
       </div>
-
-      <div className="mt-4 flex items-center gap-2">
+      {puedeEditar && (
+        <div className="mt-4 flex items-center gap-2">
         <Link
           to={`/comida/editar/${plato.id}`}
           className="flex-1 rounded-xl bg-slate-900 py-2 text-center text-sm font-semibold text-white transition hover:bg-slate-700"
@@ -35,6 +39,8 @@ export default function Platillo({ plato, onDelete, onToggleActivo, loading }: P
           Borrar
         </button>
       </div>
+      )}
+      
 
       <div className="mt-4 flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
         <span className="text-sm font-medium text-slate-600">Activo</span>
