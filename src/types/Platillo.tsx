@@ -25,7 +25,7 @@ export interface PlatilloPayload {
     precio:number,
     descripcion:string,
     activo:boolean;
-     categoria_id: number;
+    categoria_id: number;
 }
  
 

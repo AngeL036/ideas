@@ -1,6 +1,7 @@
-import { useRoleProtection } from "../hooks/useRoleProtection";
 import type { PlatilloPayload } from "../types/Platillo";
 import { Link } from "react-router-dom";
+import { useRoleProtection } from "../hooks/useRoleProtection";
+import { Pencil, Trash2 } from "lucide-react";
 
 interface Props {
   plato: PlatilloPayload;
@@ -10,49 +11,76 @@ interface Props {
 }
 
 export default function Platillo({ plato, onDelete, onToggleActivo, loading }: Props) {
-  const {hasRole} = useRoleProtection();
-  const puedeEditar = hasRole(["owner", "admin"])
+  const { hasRole } = useRoleProtection();
+  const puedeEditar = hasRole(["owner", "admin"]);
 
   return (
-    <article className="flex h-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      <div>
-        <h2 className="text-lg font-bold text-slate-900">{plato.nombre}</h2>
-        <p className="mt-1 line-clamp-3 text-sm text-slate-600">{plato.descripcion}</p>
-      </div>
-
-      <div className="mt-4 flex items-center justify-between">
-        <span className="text-2xl font-black text-emerald-600">${plato.precio}</span>
-      </div>
-      {puedeEditar && (
-        <div className="mt-4 flex items-center gap-2">
-        <Link
-          to={`/comida/editar/${plato.id}`}
-          className="flex-1 rounded-xl bg-slate-900 py-2 text-center text-sm font-semibold text-white transition hover:bg-slate-700"
-        >
-          Editar
-        </Link>
-
-        <button
-          onClick={() => onDelete(plato.id)}
-          className="rounded-xl border border-rose-200 bg-rose-50 px-3 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-100"
-        >
-          Borrar
-        </button>
-      </div>
+    <article
+      className={`
+        group relative flex flex-col justify-between
+        rounded-2xl border bg-white p-5 shadow-sm
+        transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md
+        ${plato.activo ? "border-slate-200" : "border-slate-100 opacity-60"}
+      `}
+    >
+      {/* Badge inactivo */}
+      {!plato.activo && (
+        <span className="absolute top-3 right-3 rounded-full bg-slate-100 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-slate-400">
+          Inactivo
+        </span>
       )}
-      
 
-      <div className="mt-4 flex items-center justify-between rounded-xl bg-slate-50 px-3 py-2">
-        <span className="text-sm font-medium text-slate-600">Activo</span>
-        <button
-          disabled={loading}
-          onClick={() => onToggleActivo(plato.id, !plato.activo)}
-          className={`flex h-7 w-14 items-center rounded-full p-1 transition-all duration-300
-          ${plato.activo ? "bg-emerald-500" : "bg-slate-300"}
-          ${loading ? "cursor-not-allowed opacity-50" : ""}`}
-        >
-          <div className={`h-5 w-5 rounded-full bg-white shadow-md transition-all duration-300 ${plato.activo ? "translate-x-7" : ""}`} />
-        </button>
+      {/* Nombre y descripción */}
+      <div className="space-y-1 pr-10">
+        <h2 className="text-base font-bold leading-tight text-slate-900">{plato.nombre}</h2>
+        <p className="line-clamp-2 text-xs text-slate-500">{plato.descripcion}</p>
+      </div>
+
+      {/* Precio */}
+      <div className="mt-4">
+        <span className="text-2xl font-black tracking-tight text-emerald-600">
+          ${Number(plato.precio).toFixed(2)}
+        </span>
+      </div>
+
+      {/* Footer: toggle + acciones */}
+      <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3">
+
+        {/* Toggle activo */}
+        <div className="flex items-center gap-2">
+          <button
+            disabled={loading || !puedeEditar}
+            onClick={() => puedeEditar && onToggleActivo(plato.id, !plato.activo)}
+            className={`
+              relative flex h-6 w-11 items-center rounded-full p-0.5 transition-all duration-300
+              ${plato.activo ? "bg-emerald-500" : "bg-slate-200"}
+              ${loading || !puedeEditar ? "cursor-not-allowed opacity-50" : "cursor-pointer"}
+            `}
+          >
+            <div className={`h-5 w-5 rounded-full bg-white shadow transition-all duration-300 ${plato.activo ? "translate-x-5" : "translate-x-0"}`} />
+          </button>
+          <span className="text-xs text-slate-400">{plato.activo ? "Activo" : "Pausado"}</span>
+        </div>
+
+        {/* Acciones solo para owner/admin */}
+        {puedeEditar && (
+          <div className="flex items-center gap-1">
+            <Link
+              to={`/comida/editar/${plato.id}`}
+              className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 text-slate-500 transition hover:bg-slate-900 hover:text-white"
+              title="Editar"
+            >
+              <Pencil size={13} />
+            </Link>
+            <button
+              onClick={() => onDelete(plato.id)}
+              className="flex h-8 w-8 items-center justify-center rounded-xl bg-slate-100 text-slate-500 transition hover:bg-rose-500 hover:text-white"
+              title="Eliminar"
+            >
+              <Trash2 size={13} />
+            </button>
+          </div>
+        )}
       </div>
     </article>
   );
