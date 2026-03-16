@@ -12,6 +12,7 @@ export interface CreateNegocioPayload {
     nombre: string;
     direccion?: string;
     telefono?: string;
+    giro:string;
 }
 
 export interface UpdateNegocioPayload {

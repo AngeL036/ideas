@@ -17,6 +17,7 @@ export default function FormNegocio(){
     }
 
     return(
+        <div>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div>
                 <label className="block text-sm font-medium text-slate-700">Nombre del Negocio</label>
@@ -50,6 +51,22 @@ export default function FormNegocio(){
                     className="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-slate-50 px-3 text-slate-900 outline-none transition focus:border-slate-400 focus:bg-white"
                 />
             </div>
+            <div>
+                <label className="block text-sm font-medium text-slate-700">Tipo de negocio</label>
+                <select {...register("giro",{
+                    required: "Debes Seleccionar un tipo de negocio",
+                    validate: (v) => v !== "" || "Debes seleccionar un tipo de negocio"
+                })}
+                className="mt- w-full rounded-lg border border-slate-300bg-white px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100">
+                    <option value="">Seleccionar</option>
+                    <option value="restaurante">Restaurante/cafeteria</option>
+                </select>
+                {errors.giro &&
+              <p className="text-red-500 text-sm mt-1">
+                {errors.giro.message}
+              </p>}
+
+            </div>
 
             <button
                 type="submit"
@@ -58,5 +75,6 @@ export default function FormNegocio(){
                 Crear Negocio
             </button>
         </form>
+    </div>
     )
 }
