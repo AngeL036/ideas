@@ -26,6 +26,11 @@ export interface PlatilloPayload {
     descripcion:string,
     activo:boolean;
     categoria_id: number;
+    imagen:string
+    categoria? : {
+        id:number
+        nombre:string
+    }
 }
  
 

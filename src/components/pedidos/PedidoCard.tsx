@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { PlatilloPayload } from "../../types/Platillo";
-import Swal from "sweetalert2";
+import { Plus, ImageOff, Group } from "lucide-react";
 
 interface Props {
   comida: PlatilloPayload;
@@ -8,58 +8,52 @@ interface Props {
 }
 
 export default function PedidoCard({ comida, onAgregar }: Props) {
-  const [contador, setContador] = useState(1);
-
+  
   const handleAgregar = () => {
-    onAgregar(comida.id, comida.nombre, comida.precio, contador)
-    setContador(1);
-    Swal.fire({
-      icon:"success",
-      title:"Agregando al carrito",
-      text: `${contador} ${comida.nombre}(s) listos para enviar`,
-      timer: 1200,
-      showConfirmButton: false,
-    });
+    onAgregar(comida.id, comida.nombre, comida.precio, 1)
   };
 
   return (
-    <article className="flex h-full flex-col justify-between rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
-      <div>
-        <h2 className="text-lg font-bold text-slate-900">{comida.nombre}</h2>
-        <p className="mt-1 line-clamp-3 text-sm text-slate-600">{comida.descripcion}</p>
+    <div 
+      className="group rounded-2xl border bg-white shadow-sm hover:shadow-mb transition cursor-pointer overflow-hidden active:scalate-95"
+      onClick={handleAgregar}>
+      <div 
+        className="h-32 bg-slate-100 flex items-center justify-center">
+        {comida.imagen ? (
+          <img 
+          src={comida.imagen}
+          alt={comida.nombre}
+          className="w-full h-full object-cover"
+          />
+        ): (
+          <div className="flex flex-col items-center text-slate-400">
+            <ImageOff  className="w-8 h-8"/>
+            <span className="text-sm">
+              {comida.nombre.charAt(0)}
+            </span>
+          </div>
+        )}
       </div>
-
-      <div className="mt-4 flex items-center justify-between">
-        <span className="text-2xl font-black text-emerald-600">${comida.precio}</span>
-      </div>
-
-      <div className="mt-5 flex items-center gap-3">
-        <div className="flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-1">
+      {/******/}
+      <div className="p-3 space-y-2">
+        <h3 className="font-semibold text-slate-800 line-clamp-1">
+          {comida.nombre}
+        </h3>
+        <div className="flex items-center justify-between">
+          <span className="font-bold text-emerald-600">
+            ${comida.precio}
+          </span>
           <button
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-slate-700 transition hover:bg-slate-300"
-            onClick={() => setContador(Math.max(0, contador - 1))}
+            onClick={(e) => {
+              e.stopPropagation();
+              handleAgregar();
+            }}
+            className="bg-emerald-600 text-white p-1.5 rounded-lg hover:bg-emerald-700 transition"
           >
-            -
-          </button>
-
-          <span className="w-6 text-center font-semibold text-slate-800">{contador}</span>
-
-          <button
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-200 text-slate-700 transition hover:bg-slate-300"
-            onClick={() => setContador(contador + 1)}
-          >
-            +
+            <Plus size={16} />
           </button>
         </div>
-
-        <button
-          disabled={contador === 0}
-          onClick={handleAgregar}
-          className="flex-1 rounded-xl bg-slate-900 py-2 text-sm font-semibold text-white transition hover:bg-slate-700 disabled:cursor-not-allowed disabled:bg-slate-300"
-        >
-          Agregar
-        </button>
       </div>
-    </article>
-  );
+    </div>
+  )
 }

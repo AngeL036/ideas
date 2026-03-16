@@ -25,6 +25,9 @@ export default function PedidoNuevoMesa() {
   const [loading, setLoading] = useState(true);
   const [guardandoPedido, setGuardandoPedido] = useState(false);
 
+  const [categoriaActiva , setCategoriaActiva] = useState("Todas");
+  const [busqueda, setBusqueda] = useState("");
+
   // Cargar platillos disponibles
   useEffect(() => {
     const fetchComidas = async () => {
@@ -52,6 +55,21 @@ export default function PedidoNuevoMesa() {
     };
     if (id) fetchPedido();
   }, [id]);
+  //
+  const categorias = [
+    "Todas",
+    ...new Set(comidas.map((c) => c.categoria?.nombre || "Otros"))
+  ];
+  const comidasFiltradas = comidas.filter((c) => {
+
+    const coincideCategoria = 
+      categoriaActiva === "Todas" || 
+      (c.categoria?.nombre || "Otros") === categoriaActiva;
+
+      const coincideBusqueda = 
+        c.nombre.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").includes(busqueda.toLocaleLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""));
+      return coincideBusqueda && coincideCategoria;
+  });
 
   // Acumula items en el carrito local (sin backend todavía)
   const handleAgregar = (platillo_id: number, nombre: string, precio: number, cantidad: number) => {
@@ -128,6 +146,27 @@ export default function PedidoNuevoMesa() {
           Selecciona productos para armar una orden y enviarla.
         </p>
       </header>
+      <input 
+        placeholder="Buscar platillo..."
+        value={busqueda}
+        onChange={(e) => setBusqueda(e.target.value)}
+        className="w-full rounded-xl border p-3"
+      />
+      <div className="flex gap-2 overflow-x-auto">
+        {categorias.map((cat) => (
+          <button
+          key={cat}
+          onClick={() => setCategoriaActiva(cat)}
+          className={`px-4 py-2 rounded-xl text-sm font-semibold whitespace-nowrap 
+            ${categoriaActiva === cat
+              ? "bg-emerald-600 text-white"
+              : "bg-slate-100 hover:bg-slate-200"
+            }`}
+          >
+            {cat}
+          </button>
+        ))}
+      </div>
 
       {/* Grid de platillos */}
       {comidas.length === 0 ? (
@@ -136,7 +175,7 @@ export default function PedidoNuevoMesa() {
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {comidas.map((comida) => (
+          {comidasFiltradas.map((comida) => (
             <PedidoCard key={comida.id} comida={comida} onAgregar={handleAgregar} />
           ))}
         </div>
