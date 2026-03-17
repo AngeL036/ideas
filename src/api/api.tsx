@@ -1,8 +1,9 @@
 import axios from "axios";
 
-{/*baseURL:"https://agsa.website/api", */}
+{/* baseURL:"https://agsa.website/api", */}
 
 const api = axios.create({ 
+   
     baseURL : "http://localhost:8000",
     headers:{
          "Content-Type": "application/json",
