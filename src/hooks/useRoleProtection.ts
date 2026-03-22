@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 
-export type UserRole = "owner" | "admin" | "mesero";
+export type UserRole = "owner" | "admin" | "mesero" | "vendedor";
 
 export interface AuthUser {
     id: number;

@@ -30,6 +30,7 @@ import InventarioIndex from '../pages/inventario/InventarioIndex'
 import { GiroConfig } from '../config'
 import ReportesIndex from '../pages/reportes/ReportesIndex'
 import FormAddProduct from '../pages/inventario/FormAddProduct'
+import IndexPunto from '../pages/puntoVenta/indexPunto'
 
 export default function AppRoutes({config}: {config?: GiroConfig}){
     return(
@@ -96,6 +97,8 @@ export default function AppRoutes({config}: {config?: GiroConfig}){
 
             {/* Pagos */}
             <Route path='/pagos'            element={<ProtectedRoute allowedRoles={['admin', 'owner']}><IndexPagos /></ProtectedRoute>} />
+            {/* pos */}
+            <Route path='/pos'              element={<ProtectedRoute allowedRoles={['admin', 'owner', 'vendedor']}><IndexPunto /></ProtectedRoute>}/>
         </Route>
     </Routes>
     )
