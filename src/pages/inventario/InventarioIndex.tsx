@@ -1,6 +1,34 @@
 import {  Plus } from "lucide-react"
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import type { ProductoResponse } from "../../types/Producto";
+import { obtenerProductos } from "../../api/inventario.api";
+import TablaProductos from "../../components/productos/tablaProductos";
 export default function(){
+    const [prodcutos, setProductos] = useState<ProductoResponse[]>([]);
+    const [loading, setLoading] = useState(true)
+    useEffect( () => {
+        const cargarProductos  = async () => {
+            try{
+                const  data =  await obtenerProductos();
+                setProductos(data)
+            }catch(error) {
+                console.error("Error al cargar los productos", error)
+            }finally{
+                setLoading(false)
+            }
+        }
+        cargarProductos()
+    },[])
+
+    if (loading) {
+        return (
+        <div className="flex h-60 items-center justify-center">
+            <p className="animate-pulse text-lg text-slate-400">Cargando productos...</p>
+        </div>
+        );
+    }
+
     return (
         <div className="p-6 space-y-6">
             <div className="flex items-center justify-between">
@@ -35,27 +63,14 @@ export default function(){
                             </tr>
                         </thead>
                         <tbody className="divide-y">
-                            {/* Ejemplo */}
-                            <tr className="hover:bg-gray-50 transition">
-                                <td className="px-4 py-3 font-medium text-gray-800">
-                                    Coca-Cola 600ml
-                                </td>
-                                <td className="px-4 py-3 text-gray-600">Bebidas</td>
-                                <td className="px-4 py-3 text-gray-600">Pieza</td>
-                                <td className="px-4 py-3">
-                                    <span className="px-2 py-1 text-xs rounded-full bg-green-100 text-green-700">
-                                        120
-                                    </span>
-                                </td>
-                                <td className="px-4 py-3">$10</td>
-                                <td className="px-4 py-3">$15</td>
-                                <td className="px-4 py-3 text-green-600 font-semibold">
-                                    $5
-                                </td>
-                                <td className="px-4 py-3 font-semibold">
-                                    $1800
-                                </td>
-                            </tr>
+                            {
+                                prodcutos.map((producto) => (
+                                    <TablaProductos 
+                                        key={producto.id}
+                                        producto={producto}
+                                    />
+                                ))
+                            }
                         </tbody>
                 </table>
                 </div>
