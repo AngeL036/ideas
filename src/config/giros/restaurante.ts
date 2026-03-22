@@ -15,6 +15,8 @@ const restaurante: GiroConfig = {
     { label: 'Pedidos',   ruta: '/pedidos',   icon: 'ClipboardList',   roles:['owner', 'admin',] },
     { label: 'Menú',      ruta: '/comida',    icon: 'BookOpen',        roles:['owner', 'admin', 'mesero']      },
     { label: 'Empleados', ruta: '/empleados', icon: 'UserCog',         roles:['owner', 'admin']},
+    { label: 'Inventario',  ruta: '/inventario',  icon: 'Package'         },
+
    
   ],
   dashboardWidgets: ['mesas-activas', 'pedidos-en-curso', 'ventas-hoy', 'tiempo-promedio'],

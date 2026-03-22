@@ -1,13 +1,19 @@
-import { Plus } from "lucide-react"
+import {  Plus } from "lucide-react"
+import { Link } from "react-router-dom";
 export default function(){
     return (
         <div className="p-6 space-y-6">
             <div className="flex items-center justify-between">
                 <h1 className="text-2xl font-bold text-gray-800">Inventario</h1>
-                <button 
-                    className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl shadow transition">
-                    <Plus  size={18}/>Producto
-                </button>
+                <Link
+                    to="/product/add"
+                    className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-slate-700"
+                >
+                    <Plus  size={18}/>
+                    Producto
+                    
+                </Link>
+
             </div>
             <div className="bg-white rounded-2xl shadow border border-gray-100 overflow-hidden">
                 <div className="p-4 border-b">

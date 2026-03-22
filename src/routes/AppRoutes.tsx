@@ -29,6 +29,7 @@ import VerificacionError from '../pages/auth/VerificacionError'
 import InventarioIndex from '../pages/inventario/InventarioIndex'
 import { GiroConfig } from '../config'
 import ReportesIndex from '../pages/reportes/ReportesIndex'
+import FormAddProduct from '../pages/inventario/FormAddProduct'
 
 export default function AppRoutes({config}: {config?: GiroConfig}){
     return(
@@ -89,7 +90,7 @@ export default function AppRoutes({config}: {config?: GiroConfig}){
 
             {/* Inventario */}
             <Route path='/inventario'       element={<ProtectedRoute allowedRoles={['admin', 'owner']}><InventarioIndex /></ProtectedRoute>} />
-
+            <Route path='/product/add'      element={<ProtectedRoute allowedRoles={['admin', 'owner']}><FormAddProduct /></ProtectedRoute>} />
             {/* Reportes */}
             <Route path='/reportes'         element={<ProtectedRoute allowedRoles={['admin', 'owner']}><ReportesIndex /></ProtectedRoute>}/>
 
