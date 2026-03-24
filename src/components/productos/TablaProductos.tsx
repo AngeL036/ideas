@@ -7,7 +7,7 @@ export default function TablaProductos({producto}: Props){
     return(
         <tr className="hover:bg-gray-50 transition">
             <td className="px-4 py-3 font-medium text-gray-800">
-                {producto.nombre}
+                {producto.marca}
             </td>
             <td className="px-4 py-3 text-gray-600">{producto.categoria_id}</td>
             <td className="px-4 py-3 text-gray-600">{producto.unidad}</td>

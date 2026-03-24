@@ -5,7 +5,7 @@ import { crearProductoInicial } from '../../api/inventario.api'
 
 // Tipo plano para el formulario (más fácil de manejar en RHF)
 interface FormValues {
-  nombre:       string
+  marca:       string
   unidad:       string
   codigo?:      string
   categoria_id?: number
@@ -46,7 +46,7 @@ export default function FormAddProduct() {
       // ✅ Transforma el formulario plano a la estructura anidada del backend
       await crearProductoInicial({
         producto: {
-          nombre:       data.nombre,
+          marca:        data.marca,
           unidad:       data.unidad,
           codigo:       data.codigo || null,
           categoria_id: data.categoria_id || null,
@@ -85,9 +85,9 @@ export default function FormAddProduct() {
 
         <div>
           <label className="block text-sm font-medium text-slate-700">Nombre</label>
-          <input type="text" {...register('nombre', { required: 'El nombre es obligatorio' })}
+          <input type="text" {...register('marca', { required: 'El nombre es obligatorio' })}
             className={inputClass} />
-          {errors.nombre && <p className="mt-1 text-xs text-red-500">{errors.nombre.message}</p>}
+          {errors.marca && <p className="mt-1 text-xs text-red-500">{errors.marca.message}</p>}
         </div>
 
         <div>

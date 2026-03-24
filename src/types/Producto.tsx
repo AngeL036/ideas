@@ -1,5 +1,5 @@
 export interface Producto {
-    nombre:string;
+    marca:string;
     unidad:string;
     codigo?: string | null;
     categoria_id?: number | null;
@@ -11,7 +11,7 @@ export interface ProductoResponse {
     id: number;
     categoria_id:number;
     codigo:string;
-    nombre:string;
+    marca:string;
     unidad:string;
     cantidad_actual:number;
     stock_minimo: number;

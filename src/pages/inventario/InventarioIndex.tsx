@@ -51,7 +51,7 @@ export default function(){
                     <table className="min-w-full text-sm text-left">
                         <thead className="bg-gray-50 text-gray-600 uppercase text-xs tracking-wider">
                             <tr>
-                                <th className="px-4 py-3">Nombre del producto</th>
+                                <th className="px-4 py-3">Marca del producto</th>
                                 <th className="px-4 py-3">Categoria</th>
                                 <th className="px-4 py-3">Unidad</th>
                                 <th className="px-4 py-3">Cantidad</th>
