@@ -4,10 +4,11 @@ interface Props {
     carrito: ItemCarrito[]
     onCambiarCantidad: (id: number, cantidad: number) => void
     onLimpiar: () => void
-    onCobrar: () => {}
+    onCobrar: () => void
+    loading: boolean
 }
 
-export default function CarritoVenta({ carrito, onCambiarCantidad, onLimpiar, onCobrar }: Props) {
+export default function CarritoVenta({ carrito, onCambiarCantidad, onLimpiar, onCobrar,loading }: Props) {
     const total = carrito.reduce(
         (acc, item) => acc + item.producto.precio_venta * item.cantidad, 0
     )
@@ -69,7 +70,8 @@ export default function CarritoVenta({ carrito, onCambiarCantidad, onLimpiar, on
                         <span>${total.toFixed(2)}</span>
                     </div>
                     <button
-                    onClick={() => onCobrar}
+                    onClick={onCobrar}
+                    disabled={loading}
                      className="w-full py-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors text-lg">
                         Cobrar ${total.toFixed(2)}
                     </button>
