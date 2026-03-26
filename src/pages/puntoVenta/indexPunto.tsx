@@ -11,6 +11,22 @@ export interface ItemCarrito {
 export default function PuntoVenta() {
     const [carrito, setCarrito] = useState<ItemCarrito[]>([])
 
+    const handleSubmit = async () => {
+        if (carrito.length === 0) return
+
+        try{
+            await registrarVenta({
+                items: carrito.map(i => ({
+                    producto_id: i.producto.id,
+                    cantidad: i.cantidad,
+                })),
+            })
+            limpiarCarrito()
+        }catch (error) {
+            console.error(error)
+        }
+    }
+
     const agregarAlCarrito = (producto: ProductoResponse) => {
         setCarrito(prev => {
             const existe = prev.find(i => i.producto.id === producto.id)
@@ -51,6 +67,7 @@ export default function PuntoVenta() {
                     carrito={carrito}
                     onCambiarCantidad={cambiarCantidad}
                     onLimpiar={limpiarCarrito}
+                    onCobrar={handleSubmit}
                 />
             </div>
         </div>

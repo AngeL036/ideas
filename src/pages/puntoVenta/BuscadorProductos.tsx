@@ -33,7 +33,7 @@ export default function BuscadorProductos({ onAgregar }: Props) {
         : productos.filter((p) => {
             const query = busqueda.toLowerCase()
             return (
-                p.nombre.toLowerCase().includes(query) ||
+                p.marca.toLowerCase().includes(query) ||
                 p.categoria_id?.toString().includes(query)
             )
         })
@@ -95,7 +95,7 @@ export default function BuscadorProductos({ onAgregar }: Props) {
                             className="flex items-center justify-between py-3 px-2 hover:bg-green-50 rounded cursor-pointer transition-colors"
                         >
                             <div>
-                                <p className="font-medium text-gray-800">{producto.nombre}</p>
+                                <p className="font-medium text-gray-800">{producto.marca}</p>
                                 <p className="text-xs text-gray-400">
                                     {producto.codigo} · Stock: {producto.cantidad_actual}
                                 </p>

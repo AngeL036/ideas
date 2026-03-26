@@ -4,9 +4,10 @@ interface Props {
     carrito: ItemCarrito[]
     onCambiarCantidad: (id: number, cantidad: number) => void
     onLimpiar: () => void
+    onCobrar: () => {}
 }
 
-export default function CarritoVenta({ carrito, onCambiarCantidad, onLimpiar }: Props) {
+export default function CarritoVenta({ carrito, onCambiarCantidad, onLimpiar, onCobrar }: Props) {
     const total = carrito.reduce(
         (acc, item) => acc + item.producto.precio_venta * item.cantidad, 0
     )
@@ -35,7 +36,7 @@ export default function CarritoVenta({ carrito, onCambiarCantidad, onLimpiar }: 
                     carrito.map((item) => (
                         <div key={item.producto.id} className="flex items-center gap-3 py-2 border-b border-gray-100">
                             <div className="flex-1">
-                                <p className="text-sm font-medium text-gray-800">{item.producto.nombre}</p>
+                                <p className="text-sm font-medium text-gray-800">{item.producto.marca}</p>
                                 <p className="text-xs text-gray-400">${item.producto.precio_venta} c/u</p>
                             </div>
 
@@ -67,7 +68,9 @@ export default function CarritoVenta({ carrito, onCambiarCantidad, onLimpiar }: 
                         <span>Total</span>
                         <span>${total.toFixed(2)}</span>
                     </div>
-                    <button className="w-full py-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors text-lg">
+                    <button
+                    onClick={() => onCobrar}
+                     className="w-full py-4 bg-green-500 hover:bg-green-600 text-white font-semibold rounded-xl transition-colors text-lg">
                         Cobrar ${total.toFixed(2)}
                     </button>
                 </div>
