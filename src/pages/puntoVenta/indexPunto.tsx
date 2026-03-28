@@ -1,8 +1,9 @@
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import type { ProductoResponse } from "../../types/Producto"
 import BuscadorProductos from "./BuscadorProductos"
 import CarritoVenta from "./CarritoVenta"
 import {nuevaVenta} from "../../api/venta.api"
+import { abrirCaja, getCajaActiva } from "../../api/caja.api"
 
 export interface ItemCarrito {
     producto: ProductoResponse
@@ -13,6 +14,36 @@ export default function PuntoVenta() {
     const [carrito, setCarrito] = useState<ItemCarrito[]>([])
     const [loading, setLoading] = useState(false)
     const [errorMsg, setErrorMsg] = useState<string | null > (null)
+    const [cajaAbierta, setCajaAbierta] = useState<boolean | null>(null)
+    const [montoInicial, setMontoInicial] = useState<string>("")
+    const [cajaLoadin, setCajaLoading] = useState(false)
+    const [cajaError, setCajaError] = useState<string | null>(null)
+
+    useEffect(() => {
+        getCajaActiva()
+            .then(caja => setCajaAbierta(!!caja))
+            .catch(() => setCajaAbierta(false))
+    },[])
+
+    const handleAbrirCaja = async () => {
+        const monto = parseFloat(montoInicial)
+        if(isNaN(monto) || monto < 0){
+            setCajaError("Ingrese un monto inicial válido")
+            return
+        }
+        setCajaLoading(true)
+        setCajaError(null)
+        try{
+            await abrirCaja(monto)
+            setCajaAbierta(true)
+        }catch {
+            setCajaError("No se pudo abrir la caja. Intenta de nuevo.")
+        } finally {
+            setCajaLoading(false)
+        }
+    }
+
+
     const handleSubmit = async () => {
         if (carrito.length === 0 || loading) return
         setLoading(true)
@@ -59,6 +90,55 @@ export default function PuntoVenta() {
     }
 
     const limpiarCarrito = () => setCarrito([])
+
+    if(!cajaAbierta === null){
+        return (
+            <div className="flex h-screen items-center justify-center text-gray-400">
+                Cargando...
+            </div>
+        )
+    }
+    if(!cajaAbierta){
+        return (
+            <div className="flex h-screen items-center justify-center bg-gray-50">
+                <div className="w-full max-w-sm rounded-xl border border-gray-200 bg-white p-8 shadow-sm">
+                    <h2 className="mb-1 text-lg font-medium text-gray-900">
+                        No hay caja abierta
+                    </h2>
+                    <p className="mb-6 text-sm text-gray-500">
+                        Ingrese el monto inicial en efectivo para comenzar a vender
+                    </p>
+                    <label className="mb-1 block text-sm text-gray-600">
+                        Monto inicial
+                    </label>
+                    <div className="mb-4 flex overflow-hidden rounded-lg border border-gray-200">
+                        <span className="flex items-center border-r border-gray-200 bg-gray-50 px-3 text-sm text-gray-500">
+                            $
+                        </span>
+                        <input 
+                            type="number"
+                            min="0"
+                            placeholder="0.00"
+                            value={montoInicial}
+                            onChange={ e => setMontoInicial(e.target.value)}
+                            onKeyDown={e => e.key === "Enter" && handleAbrirCaja()}
+                            className="flex-1 bg-transparent px-3 py-2 text-sm outline-none" 
+                        />
+                    </div>
+                    {cajaError && (
+                        <p className="mb-3 text-sm text-red-600">{cajaError}</p>
+                    )}
+                    <button
+                        onClick={handleAbrirCaja}
+                        disabled={cajaLoading}
+                        className="w-full rounded-lg bg-gray-900 py-2 text-sm font-medium text-white hover:bg-gray-700 disable:opacity-50"
+                    >
+                        {cajaAbierta ? "Abriendo..." : "Abrir caja"}
+                    </button>
+                </div>
+            </div>
+        )
+    }
 
     return (
         <div className="flex h-screen gap-4 p-4 bg-gray-50">
