@@ -16,7 +16,7 @@ export default function PuntoVenta() {
     const [errorMsg, setErrorMsg] = useState<string | null > (null)
     const [cajaAbierta, setCajaAbierta] = useState<boolean | null>(null)
     const [montoInicial, setMontoInicial] = useState<string>("")
-    const [cajaLoadin, setCajaLoading] = useState(false)
+    const [cajaLoading, setCajaLoading] = useState(false)
     const [cajaError, setCajaError] = useState<string | null>(null)
 
     useEffect(() => {
