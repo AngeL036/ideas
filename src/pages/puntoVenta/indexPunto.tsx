@@ -4,6 +4,9 @@ import BuscadorProductos from "./BuscadorProductos"
 import CarritoVenta from "./CarritoVenta"
 import {nuevaVenta} from "../../api/venta.api"
 import { abrirCaja, getCajaActiva } from "../../api/caja.api"
+import TicketModal from "../../components/puntoVenta/TicketModal"
+import PagoModal from "../../components/puntoVenta/PagoModal"
+import Swal from "sweetalert2"
 
 export interface ItemCarrito {
     producto: ProductoResponse
@@ -13,11 +16,22 @@ export interface ItemCarrito {
 export default function PuntoVenta() {
     const [carrito, setCarrito] = useState<ItemCarrito[]>([])
     const [loading, setLoading] = useState(false)
-    const [errorMsg, setErrorMsg] = useState<string | null > (null)
     const [cajaAbierta, setCajaAbierta] = useState<boolean | null>(null)
     const [montoInicial, setMontoInicial] = useState<string>("")
     const [cajaLoading, setCajaLoading] = useState(false)
     const [cajaError, setCajaError] = useState<string | null>(null)
+
+    const [pagoModal, setPagoModal] = useState(false)
+
+    const [ticketModal, setTicketModal] = useState<{visible: boolean; total: number}>({
+        visible: false,
+        total:0
+    })
+
+    const totalCarrito = carrito.reduce(
+                (acc, i) => acc + i.producto.precio_venta * i.cantidad,
+                0
+            )
 
     useEffect(() => {
         getCajaActiva()
@@ -43,11 +57,13 @@ export default function PuntoVenta() {
         }
     }
 
+    const handleCobrar = () => {
+        if(carrito.length === 0 ) return 
+        setPagoModal(true)
+    }
 
-    const handleSubmit = async () => {
-        if (carrito.length === 0 || loading) return
+    const handleConfirmarPago = async (montoPago: number) => {
         setLoading(true)
-        setErrorMsg(null)
         try{
             await nuevaVenta({
                 items: carrito.map(i => ({
@@ -55,10 +71,17 @@ export default function PuntoVenta() {
                     cantidad: i.cantidad,
                 })),
             })
+            const total = totalCarrito
             limpiarCarrito()
+            setPagoModal(false)
+            setTicketModal({ visible: true, total})
         }catch (error) {
-            setErrorMsg("Error al registrar la venta. Intenta de nuevo")
-            console.error(error)
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Error al registrar la venta. Intenta de nuevo."
+            })
+            setPagoModal(false)
         }finally {
             setLoading(false)
         }
@@ -129,7 +152,7 @@ export default function PuntoVenta() {
                         <p className="mb-3 text-sm text-red-600">{cajaError}</p>
                     )}
                     <button
-                        onClick={handleAbrirCaja}
+                           onClick={handleAbrirCaja}
                         disabled={cajaLoading}
                         className="w-full rounded-lg bg-gray-900 py-2 text-sm font-medium text-white hover:bg-gray-700 disable:opacity-50"
                     >
@@ -141,6 +164,7 @@ export default function PuntoVenta() {
     }
 
     return (
+        <>  
         <div className="flex h-screen gap-4 p-4 bg-gray-50">
             {/* Panel izquierdo — búsqueda */}
             <div className="flex-1 overflow-y-auto">
@@ -149,19 +173,30 @@ export default function PuntoVenta() {
 
             {/* Panel derecho — carrito */}
             <div className="w-96 flex-shrink-0">
-                {errorMsg && (
-                    <div className="mb-2 rounded bg-red-100 px-3 py-2 text-sm text-red-700">
-                        {errorMsg}
-                    </div>
-                )}
+                
                 <CarritoVenta
                     carrito={carrito}
                     onCambiarCantidad={cambiarCantidad}
                     onLimpiar={limpiarCarrito}
-                    onCobrar={handleSubmit}
+                    onCobrar={handleCobrar}
                     loading={loading}
                 />
             </div>
         </div>
+        {pagoModal && (
+            <PagoModal 
+                total={totalCarrito}
+                loading={loading}
+                onConfirmar={handleConfirmarPago}
+                onCancelar={() => setPagoModal(false)}
+            />
+        )}
+        {ticketModal.visible && (
+            <TicketModal
+             total={ticketModal.total}
+             onClose={() => setTicketModal({visible: false, total:0})}
+             />
+        )}
+    </>
     )
 }
