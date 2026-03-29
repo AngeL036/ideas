@@ -84,8 +84,8 @@ export default function FormAddProduct() {
       <form onSubmit={handleSubmit(onSubmit)} className="mt-6 space-y-4">
 
         <div>
-          <label className="block text-sm font-medium text-slate-700">Nombre</label>
-          <input type="text" {...register('marca', { required: 'El nombre es obligatorio' })}
+          <label className="block text-sm font-medium text-slate-700">Marca</label>
+          <input type="text" {...register('marca', { required: 'La marca es obligatorio' })}
             className={inputClass} />
           {errors.marca && <p className="mt-1 text-xs text-red-500">{errors.marca.message}</p>}
         </div>
