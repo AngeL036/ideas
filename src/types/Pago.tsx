@@ -24,3 +24,11 @@ export interface PedidoPago {
     mesa_id :number;
     monto: number;
 }
+
+export interface PagoResponse {
+    venta_id: number
+    total: number
+    monto_pagado: number
+    cambio: number
+    metodo: string
+}
