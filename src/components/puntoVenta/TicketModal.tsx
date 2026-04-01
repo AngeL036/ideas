@@ -1,13 +1,16 @@
 import { useEffect, useRef, useState } from "react"
+import { enviarTiket } from "../../api/venta.api"
+
 
 interface TicketModalProps {
+    ventaId: number
     total: number
     onClose: () => void
 }
 
 type Medio = "correo" | "whatsapp" | "otro" | null
 
-export default function TicketModal({ total, onClose }: TicketModalProps) {
+export default function TicketModal({ventaId, total, onClose }: TicketModalProps) {
     const [medioSeleccionado, setMedioSeleccionado] = useState<Medio>(null)
     const [valor, setValor] = useState("")
     const [enviando, setEnviando] = useState(false)
@@ -57,14 +60,20 @@ export default function TicketModal({ total, onClose }: TicketModalProps) {
     }
 
     const handleEnviar = async () => {
-        if (!validate()) return
+        if (!validate() || enviado || !medioSeleccionado) return
         setEnviando(true)
         setError(null)
-        // Aquí conectas tu API real de envío de ticket
-        await new Promise(r => setTimeout(r, 1200))
-        setEnviando(false)
-        setEnviado(true)
-        setTimeout(onClose, 1800)
+        try{
+            await enviarTiket(ventaId, medioSeleccionado, valor)
+            setEnviado(true)
+            setTimeout(onClose, 1800)
+        }catch(e:any) {
+            const msg = e?.response?.data?.detail ?? "No se pudo enviar el ticket. Intenta de nuevo."
+            setError(msg)
+        }finally {
+            setEnviando(false)
+        }
+       
     }
 
     return (

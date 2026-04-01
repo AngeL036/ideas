@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import type { ProductoResponse } from "../../types/Producto"
 import BuscadorProductos from "./BuscadorProductos"
 import CarritoVenta from "./CarritoVenta"
-import {nuevaVenta} from "../../api/venta.api"
+import {nuevaVenta, registrarPago} from "../../api/venta.api"
 import { abrirCaja, getCajaActiva } from "../../api/caja.api"
 import TicketModal from "../../components/puntoVenta/TicketModal"
 import PagoModal from "../../components/puntoVenta/PagoModal"
@@ -23,8 +23,9 @@ export default function PuntoVenta() {
 
     const [pagoModal, setPagoModal] = useState(false)
 
-    const [ticketModal, setTicketModal] = useState<{visible: boolean; total: number}>({
+    const [ticketModal, setTicketModal] = useState<{visible: boolean; total: number; ventaId: number}>({
         visible: false,
+        ventaId: 0,
         total:0
     })
 
@@ -65,16 +66,16 @@ export default function PuntoVenta() {
     const handleConfirmarPago = async (montoPago: number) => {
         setLoading(true)
         try{
-            await nuevaVenta({
-                items: carrito.map(i => ({
-                    producto_id: i.producto.id,
-                    cantidad: i.cantidad,
-                })),
-            })
-            const total = totalCarrito
+            const { venta_id, total } = await nuevaVenta(
+                carrito.map(i => ({producto_id: i.producto.id, cantidad: i.cantidad}))
+            )
+
+            await registrarPago(venta_id, {monto_pagado: montoPago, metodo: "efectivo"})
+
+            
             limpiarCarrito()
             setPagoModal(false)
-            setTicketModal({ visible: true, total})
+            setTicketModal({ visible: true, ventaId: venta_id, total })
         }catch (error) {
             Swal.fire({
                 icon: "error",
@@ -193,8 +194,9 @@ export default function PuntoVenta() {
         )}
         {ticketModal.visible && (
             <TicketModal
+             ventaId={ticketModal.ventaId}
              total={ticketModal.total}
-             onClose={() => setTicketModal({visible: false, total:0})}
+             onClose={() => setTicketModal({visible: false, ventaId:0, total:0})}
              />
         )}
     </>

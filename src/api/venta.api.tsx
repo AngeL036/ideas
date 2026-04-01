@@ -13,14 +13,6 @@ export const registrarPago = async(venta_id: number,payload: PagoPayload,): Prom
     return data
 }
 
-export const enviarTicketCorreo = async(venta_id: number, email: string) : Promise<void> => {
-    await api.post(`/ventas/${venta_id}/enviar-ticket/`, {email});
-
-}
-
-export const enviarTicketWhatsApp = async (
-    venta_id: number,
-    numero: string,
-): Promise<void> => {
-    await api.post(`/ventas/${venta_id}/ticket/whatsapp`, { numero })
+export const enviarTiket = async (venta_id:number,medio: "correo" | "whatsapp" | "otro", valor: string): Promise<void> => {
+    await api.post(`/ventas/${venta_id}/enviar-ticket/`, { medio, valor });
 }
