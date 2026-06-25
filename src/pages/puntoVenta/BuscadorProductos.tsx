@@ -34,7 +34,8 @@ export default function BuscadorProductos({ onAgregar }: Props) {
             const query = busqueda.toLowerCase()
             return (
                 p.marca.toLowerCase().includes(query) ||
-                p.categoria_id?.toString().includes(query)
+                p.categoria_id?.toString().includes(query) ||
+                p.codigo?.toString().includes(query)
             )
         })
 

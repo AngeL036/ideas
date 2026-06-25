@@ -173,7 +173,7 @@ export default function PuntoVenta() {
             </div>
 
             {/* Panel derecho — carrito */}
-            <div className="w-96 flex-shrink-0">
+            <div className="w-96 shrink-0">
                 
                 <CarritoVenta
                     carrito={carrito}

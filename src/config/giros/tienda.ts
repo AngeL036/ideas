@@ -13,11 +13,11 @@ const tienda: GiroConfig = {
     { label: 'Dashboard',   ruta: '/',  icon: 'LayoutDashboard' },
     { label: 'Punto Venta', ruta: '/pos',         icon: 'ShoppingCart'    },
     { label: 'Inventario',  ruta: '/inventario',  icon: 'Package'         },
-    { label: 'Clientes',    ruta: '/clientes',    icon: 'Users'           },
-    { label: 'Compras',     ruta: '/compras',     icon: 'ShoppingBag'     },
-    { label: 'Reportes',    ruta: '/reportes',    icon: 'BarChart2'       },
+
   ],
   dashboardWidgets: ['ventas-hoy', 'productos-bajo-stock', 'clientes-nuevos', 'top-productos'],
 }
-
+{/*    { label: 'Clientes',    ruta: '/clientes',    icon: 'Users'           },
+   
+    { label: 'Reportes',    ruta: '/reportes',    icon: 'BarChart2'       }, */}
 export default tienda
