@@ -6,6 +6,7 @@ import {nuevaVenta, registrarPago} from "../../api/venta.api"
 import { abrirCaja, getCajaActiva } from "../../api/caja.api"
 import TicketModal from "../../components/puntoVenta/TicketModal"
 import PagoModal from "../../components/puntoVenta/PagoModal"
+import MenuPuntoVentaModal from "../../components/puntoVenta/MenuPuntoVentaModal"
 import Swal from "sweetalert2"
 
 export interface ItemCarrito {
@@ -22,6 +23,7 @@ export default function PuntoVenta() {
     const [cajaError, setCajaError] = useState<string | null>(null)
 
     const [pagoModal, setPagoModal] = useState(false)
+    const [menuOpen, setMenuOpen] = useState(false)
 
     const [ticketModal, setTicketModal] = useState<{visible: boolean; total: number; ventaId: number}>({
         visible: false,
@@ -95,7 +97,9 @@ export default function PuntoVenta() {
                 //Si ya está, solo sube la cantidad
                 return prev.map(i =>
                     i.producto.id === producto.id
-                        ? { ...i, cantidad: i.cantidad + 1 }
+                        ? { ...i, cantidad: i.cantidad < producto.estado_stock
+                            ?  i.cantidad + 1
+                            : i.cantidad }
                         : i
                 )
             }
@@ -104,18 +108,23 @@ export default function PuntoVenta() {
     }
 
     const cambiarCantidad = (id: number, cantidad: number) => {
-        if (cantidad <= 0) {
-            setCarrito(prev => prev.filter(i => i.producto.id !== id))
-        } else {
-            setCarrito(prev =>
-                prev.map(i => i.producto.id === id ? { ...i, cantidad } : i)
-            )
-        }
+      setCarrito(prev => 
+        prev.map(item => {
+            if(item.producto.id !== id) return item;
+            return {
+                ...item,
+                cantidad: Math.min(
+                    Math.max(cantidad,1),
+                    item.producto.estado_stock
+                )
+            }
+        })
+      )
     }
 
     const limpiarCarrito = () => setCarrito([])
 
-    if(!cajaAbierta === null){
+    if(cajaAbierta === null){
         return (
             <div className="flex h-screen items-center justify-center text-gray-400">
                 Cargando...
@@ -155,9 +164,9 @@ export default function PuntoVenta() {
                     <button
                            onClick={handleAbrirCaja}
                         disabled={cajaLoading}
-                        className="w-full rounded-lg bg-gray-900 py-2 text-sm font-medium text-white hover:bg-gray-700 disable:opacity-50"
+                        className="w-full rounded-lg bg-gray-900 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
                     >
-                        {cajaAbierta ? "Abriendo..." : "Abrir caja"}
+                        {cajaLoading  ? "Abriendo..." : "Abrir caja"}
                     </button>
                 </div>
             </div>
@@ -166,14 +175,14 @@ export default function PuntoVenta() {
 
     return (
         <>  
-        <div className="flex h-screen gap-4 p-4 bg-gray-50">
+        <div className="flex  h-screen gap-4 p-4 bg-gray-50">
             {/* Panel izquierdo — búsqueda */}
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-hidden"> 
                 <BuscadorProductos onAgregar={agregarAlCarrito} />
             </div>
 
             {/* Panel derecho — carrito */}
-            <div className="w-96 shrink-0">
+            <div className="w-420px shrink-0 flex flex-col gap-3">
                 
                 <CarritoVenta
                     carrito={carrito}
@@ -182,7 +191,14 @@ export default function PuntoVenta() {
                     onCobrar={handleCobrar}
                     loading={loading}
                 />
+                <button 
+                 onClick={() => setMenuOpen(true)}
+                 className="rounded-xl bg-slate-800 px-4 py-4 font-medium text-white transition hover:bg-slate-700"
+                 >
+                    Mas Opciones
+                </button>
             </div>
+            
         </div>
         {pagoModal && (
             <PagoModal 
@@ -199,6 +215,11 @@ export default function PuntoVenta() {
              onClose={() => setTicketModal({visible: false, ventaId:0, total:0})}
              />
         )}
+        <MenuPuntoVentaModal 
+            open={menuOpen}
+            onClose={() => setMenuOpen(false)}
+        />
+        
     </>
     )
 }

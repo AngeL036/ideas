@@ -75,7 +75,7 @@ export default function BuscadorProductos({ onAgregar }: Props) {
             {/* Indicación inicial — sin escribir nada */}
             {!loading && !error && busqueda.trim() === "" && (
                 <p className="text-center text-gray-400 py-8 text-sm">
-                    Escribe para buscar un producto
+                    
                 </p>
             )}
 
