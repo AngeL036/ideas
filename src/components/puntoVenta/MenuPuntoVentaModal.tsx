@@ -13,6 +13,7 @@ import {
 interface MenuPuntoVentaModalProps {
   open: boolean;
   onClose: () => void;
+  onAction: (action: string) => void;
 }
 
 interface MenuOption {
@@ -76,6 +77,7 @@ const opciones: MenuOption[] = [
 export default function MenuPuntoVentaModal({
     open,
     onClose,
+    onAction,
 }: MenuPuntoVentaModalProps){
     if(!open) return null;
     return(
@@ -105,6 +107,10 @@ export default function MenuPuntoVentaModal({
                         return(
                             <button
                                 key={opcion.id}
+                                onClick={() => {
+                                  onAction(opcion.id);
+                                  onClose();
+                                }}
                                 className="flex flex-col items-center justify-center rounded-xl border border-slate-200 p-5 transition hover:border-blue-400 hover:bg-slate-50 hover:shadow-md"
                             >
                                 <Icon className={`${opcion.color} mb-3`} size={34} />

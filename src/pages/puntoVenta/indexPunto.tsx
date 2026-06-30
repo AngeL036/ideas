@@ -64,6 +64,41 @@ export default function PuntoVenta() {
         if(carrito.length === 0 ) return 
         setPagoModal(true)
     }
+    const handleMenuAction= (action:string) =>  {
+        switch(action) {
+            case "abrir":
+                console.log("Abrir caja");
+            break;
+
+        case "cerrar":
+            console.log("Cerrar caja");
+            break;
+
+        case "corte":
+            console.log("Corte de caja");
+            break;
+
+        case "entrada":
+            console.log("Entrada de efectivo");
+            break;
+
+        case "salida":
+            console.log("Salida de efectivo");
+            break;
+
+        case "ticket":
+            console.log("Reimprimir ticket");
+            break;
+
+        case "historial":
+            console.log("Historial");
+            break;
+
+        case "configuracion":
+            console.log("Configuración");
+            break;
+        }
+    }
 
     const handleConfirmarPago = async (montoPago: number) => {
         setLoading(true)
@@ -218,6 +253,7 @@ export default function PuntoVenta() {
         <MenuPuntoVentaModal 
             open={menuOpen}
             onClose={() => setMenuOpen(false)}
+            onAction={handleMenuAction}
         />
         
     </>
