@@ -24,12 +24,7 @@ interface MenuOption {
 }
 
 const opciones: MenuOption[] = [
-  {
-    id: "abrir",
-    label: "Abrir caja",
-    icon: Wallet,
-    color: "text-green-600",
-  },
+  
   {
     id: "cerrar",
     label: "Cerrar caja",
